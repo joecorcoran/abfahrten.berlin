@@ -9,6 +9,21 @@ body {
   padding: 0;
 }
 
+.nav {
+  width: 100%;
+  background: rgba(230, 230, 230, 1);
+  margin: 0;
+  padding: 1rem 0.5rem;
+  display: inline-block;
+}
+
+.nav-heading {
+  margin: 0;
+  padding: 0;
+  width: 40%;
+  float: left;
+}
+
 .board {
   max-height: 50rem;
   overflow-y: scroll;
@@ -64,6 +79,7 @@ body {
   text-align: center;
   position: absolute;
   left: 0;
+  background-color: rgba(50, 50, 50, 1);
 }
 
 .departure-time {
@@ -77,18 +93,18 @@ body {
   top: 0;
 }
 
-.departure-line--s3 {
+.departure-line-num--S3 {
   background-color: rgba(0, 97, 175, 1);
 }
 
-.departure-line--s5 {
+.departure-line-num--S5 {
   background-color: rgba(241, 114, 0, 1);
 }
 
-.departure-line--s7 {
+.departure-line-num--S7 {
   background-color: rgba(132, 105, 175, 1);
 }
 
-.departure-line--s9 {
+.departure-line-num--S9 {
   background-color: rgba(158, 38, 71, 1);
 }
