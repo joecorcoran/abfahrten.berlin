@@ -3,7 +3,7 @@ import {ReduceStore} from 'flux/utils';
 import data from './data';
 import dispatcher from './dispatcher';
 
-class StationStore extends ReduceStore {
+class BoardStore extends ReduceStore {
   constructor() {
     super(dispatcher);
   }
@@ -14,8 +14,8 @@ class StationStore extends ReduceStore {
 
   reduce(state, action) {
     switch (action.actionType) {
-      case 'add-station':
-        return state.add(action.station);
+      case 'board:create':
+        return state.add(action.board);
       default:
         return state;
     }
@@ -34,11 +34,11 @@ class DeparturesStore extends ReduceStore {
 
   reduce(state, action) {
     switch (action.actionType) {
-      case 'add-station':
-        state.clear(); 
-        return state.set(action.station.key, Immutable.Set(data.departures(action.station.fromId, action.station.toId)));
-      case 'departures-done':
-        return state.set(action.stationKey, Immutable.Set(action.departures));
+      case 'board:create':
+        let departures = data.departures(action.board.fromId, action.board.toId);
+        return state.set(action.board.id, departures);
+      case 'departures:retrieved':
+        return state.set(action.boardId, action.departures);
       default:
         return state;
     }
@@ -46,4 +46,4 @@ class DeparturesStore extends ReduceStore {
   }
 }
 
-export {DeparturesStore, StationStore};
+export {DeparturesStore, BoardStore};

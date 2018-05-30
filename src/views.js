@@ -2,22 +2,13 @@ import classnames from 'classnames';
 import React from 'react';
 import dispatcher from './dispatcher';
 
-function start() {
-  // abfahrten.berlin/dashboard?s[]=900000120004|900000120004&s[]=900000120004|900000120003
-
-  dispatcher.dispatch({
-    actionType: 'add-station',
-    station: { key: `${900000120004}:${900000120003}`, fromId: 900000120004, fromName: 'S+U Warschauer Str.', toId: 900000120003, toName: 'S Ostkreuz' } 
-  });
-}
-
 function AppView(props) {
   return (
     <div>
       <NavView />
       <div className="flex flex-wrap mw9 center cf">
-        {props.stations.map(s => (
-          <BoardView departures={props.departures.get(s.key) || []} {...s} />
+        {props.boards.map(b => (
+          <BoardView key={b.id} departures={props.departures.get(b.id) || []} {...b} />
         ))}
       </div>
     </div>
@@ -25,6 +16,14 @@ function AppView(props) {
 }
 
 function NavView(props) {
+  function start() {
+    // abfahrten.berlin/dashboard?s[]=900000120004|900000120004&s[]=900000120004|900000120003
+    dispatcher.dispatch({
+      actionType: 'board:create',
+      board: { id: `${900000120004}:${900000120003}`, fromId: 900000120004, fromName: 'S+U Warschauer Str.', toId: 900000120003, toName: 'S Ostkreuz' } 
+    });
+  }
+
   return (
     <header className="nav">
       <h1 className="nav-heading">abfahrten.berlin</h1>
@@ -55,12 +54,8 @@ function DeparturesView(props) {
   return (
     <section className="departures">
       <ul className="w-100 pa0 ma0">
-        {props.departures.sort((a, b) => {
-          if (a.time < b.time) return -1;
-          if (a.time > b.time) return 1;
-          if (a.time === b.time) return 0;
-        }).map(d => (
-          <li key={d.key} className="departure w-100">
+        {props.departures.map(d => (
+          <li key={d.key} className={classnames({ departure: true, 'w-100': true, cancelled: d.isCancelled})}>
             <span className="departure-destination">{d.destination}</span>
             <span className={classnames('departure-line-num', `departure-line-num--${d.lineNum}`)}>{d.lineNum}</span>
             <span className="departure-time">{d.timeText}</span>

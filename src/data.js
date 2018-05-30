@@ -1,25 +1,67 @@
 import dayjs from 'dayjs';
+import Immutable from 'immutable';
 import dispatcher from './dispatcher';
 import VBB from './vbb';
 
-function fakeDeparture() {
-  return {
-    key: '0',
-    lineNum: '--',
-    destination: 'Loading...',
-    timeText: 'now'
+class Departure {
+  constructor(data) {
+    this.data = data;
   }
-}
 
-function departure(data) {
-  let mins = dayjs(data.when).diff(dayjs(), 'minutes');
-  return {
-    key: data.journeyId,
-    lineNum: data.line.name,
-    destination: data.direction,
-    time: mins,
-    timeText: mins === 0 ? 'now' : `${mins} min`
-  };
+  static fake() {
+    return new Departure({
+      journeyId: '',
+      line: { name: '••' },
+      direction: 'Loading...',
+      when: null,
+      cancelled: false
+    });
+  }
+
+  static order(set) {
+    return set.sort((a, b) => {
+      if (a.time < b.time) return -1;
+      if (a.time > b.time) return 1;
+      if (a.time === b.time) return 0;
+    });
+  }
+
+  get key() {
+    return this.data.journeyId;
+  }
+
+  get lineNum() {
+    return this.data.line.name;
+  }
+
+  get destination() {
+    return this.data.direction;
+  }
+
+  get time() {
+    return this.calcTime();
+  }
+
+  get timeText() {
+    let t = this.calcTime();
+    switch (t) {
+      case -1:
+        return '';
+      case 0:
+        return 'now';
+      default:
+        return `${t} min`;
+    }
+  }
+
+  get isCancelled() {
+    return !this.data.when && this.data.cancelled;
+  }
+
+  calcTime() {
+    if (!this.data.when) return -1;
+    return dayjs(this.data.when).diff(dayjs(), 'minutes');
+  }
 }
 
 const data = {
@@ -27,12 +69,12 @@ const data = {
     VBB.getDepartures(fromId, toId, function(error, response) {
       if (error) return;
       dispatcher.dispatch({
-        actionType: 'departures-done',
-        stationKey: `${fromId}:${toId}`,
-        departures: response.body.map(departure)
+        actionType: 'departures:retrieved',
+        boardId: `${fromId}:${toId}`,
+        departures: Departure.order(Immutable.Set(response.body.map(d => new Departure(d))))
       });
     });
-    return [fakeDeparture()];
+    return Immutable.Set([Departure.fake()]);
   }
 };
 

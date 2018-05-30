@@ -2,21 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Container} from 'flux/utils';
 import {AppView} from './views';
-import {DeparturesStore, StationStore} from './stores';
+import {BoardStore, DeparturesStore} from './stores';
 
-let stations = new StationStore();
+let boards = new BoardStore();
 let departures = new DeparturesStore();
 
 function getStores() {
   return [
-    stations,
+    boards,
     departures
   ];
 };
 
 function getState() {
   return {
-    stations: stations.getState(),
+    boards: boards.getState(),
     departures: departures.getState()
   };
 };

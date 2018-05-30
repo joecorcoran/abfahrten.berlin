@@ -69,6 +69,10 @@ body {
   display: inline-block;
 }
 
+.cancelled .departure-destination {
+  text-decoration: line-through;
+}
+
 .departure-line-num {
   display: inline-block;
   color: white; 
