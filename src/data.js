@@ -4,10 +4,6 @@ import dispatcher from './dispatcher';
 import VBB from './vbb';
 
 class Departure {
-  constructor(data) {
-    this.data = data;
-  }
-
   static fake() {
     return new Departure({
       journeyId: '',
@@ -19,11 +15,15 @@ class Departure {
   }
 
   static order(set) {
-    return set.sort((a, b) => {
+    return Immutable.Set(set).sort((a, b) => {
       if (a.time < b.time) return -1;
       if (a.time > b.time) return 1;
       if (a.time === b.time) return 0;
     });
+  }
+
+  constructor(data) {
+    this.data = data;
   }
 
   get key() {
@@ -64,17 +64,65 @@ class Departure {
   }
 }
 
+class Station {
+  static fake() {
+    return new Station();
+  }
+
+  static order(set) {
+    return Immutable.Set(set).sort((a, b) => {
+      if (a.relevance > b.relevance) return -1;
+      if (a.relevance < b.relevance) return 1;
+      if (a.relevance === b.relevance) return 0;
+    });
+  }
+
+  constructor(data) {
+    this.data = data;
+  }
+
+  get key() {
+    return this.data.id;
+  }
+
+  get name() {
+    return this.data.name;
+  }
+
+  get relevance() {
+    return this.data.relevance;
+  }
+
+  get latlong() {
+    return [
+      this.data.location.latitude,
+      this.data.location.longitude
+    ];
+  }
+}
+
 const data = {
-  departures: function(fromId, toId) {
+  departures(fromId, toId) {
     VBB.getDepartures(fromId, toId, function(error, response) {
       if (error) return;
       dispatcher.dispatch({
         actionType: 'departures:retrieved',
         boardId: `${fromId}:${toId}`,
-        departures: Departure.order(Immutable.Set(response.body.map(d => new Departure(d))))
+        departures: Departure.order(response.body.map(d => new Departure(d)))
       });
     });
     return Immutable.Set([Departure.fake()]);
+  },
+
+  searchStations(query) {
+    VBB.searchStations(query, function(error, response) {
+      if (error) return;
+      dispatcher.dispatch({
+        actionType: 'stations:retrieved',
+        stations: Station.order(response.body.map(s => new Station(s)))
+      });
+    });
+    return Immutable.Set([Station.fake()]);
   }
 };
 

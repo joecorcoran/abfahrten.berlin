@@ -1,11 +1,12 @@
 import classnames from 'classnames';
 import React from 'react';
+import data from './data';
 import dispatcher from './dispatcher';
 
 function AppView(props) {
   return (
     <div>
-      <NavView />
+      <NavView {...props} />
       <div className="flex flex-wrap mw9 center cf">
         {props.boards.map(b => (
           <BoardView key={b.id} departures={props.departures.get(b.id) || []} {...b} />
@@ -27,8 +28,25 @@ function NavView(props) {
   return (
     <header className="nav">
       <h1 className="nav-heading">abfahrten.berlin</h1>
-      <button className="nav-add-button fr" onClick={start}>Station hinzufügen</button>
+      <SearchView {...props} />
     </header>
+  );
+}
+
+function SearchView(props) {
+  function search(event) {
+    data.searchStations(event.target.value);
+  }
+
+  return (
+    <div className="search">
+      <input className="search-input" type="search" placeholder="Station suchen" onChange={search} />
+      <ul className="search-results">
+        {props.stations.map(s => (
+          <li key={s.key}>{s.name}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

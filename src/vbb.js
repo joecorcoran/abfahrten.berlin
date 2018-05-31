@@ -4,8 +4,8 @@ let root = 'https://2.vbb.transport.rest';
 
 let VBB = {
   // Send X-Identifier header when live
-  searchStation(query, cb) {
-    return xhr.get(`${root}/stations?query=${query}`, { json: true }, cb);
+  searchStations(query, cb) {
+    return xhr.get(`${root}/stations?query=${query}&fuzzy=true&results=10`, { json: true }, cb);
   },
 
   getDepartures(fromId, toId, cb) {
