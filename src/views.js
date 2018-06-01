@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import data from './data';
 import dispatcher from './dispatcher';
 
@@ -16,8 +17,13 @@ function AppView(props) {
   );
 }
 
-function NavView(props) {
-  function start() {
+class NavView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { showSearch: false };
+  }
+
+  start() {
     // abfahrten.berlin/dashboard?s[]=900000120004|900000120004&s[]=900000120004|900000120003
     dispatcher.dispatch({
       actionType: 'board:create',
@@ -25,29 +31,86 @@ function NavView(props) {
     });
   }
 
-  return (
-    <header className="nav">
-      <h1 className="nav-heading">abfahrten.berlin</h1>
-      <SearchView {...props} />
-    </header>
-  );
+  showSearch = () => {
+    return this.setState({ showSearch: true });
+  }
+
+  hideSearch = () => {
+    return this.setState({ showSearch: false });
+  }
+
+  render() {
+    const search = this.state.showSearch ? (<SearchView {...this.props} hide={this.hideSearch} />) : null;
+    return (
+      <header className="nav">
+        <h1 className="nav-heading">abfahrten.berlin</h1>
+        <a className="nav-search-link pointer underline" onClick={this.showSearch}>Abfahrtstafel erstellen</a>
+        { search }
+      </header>
+    );
+  }
 }
 
-function SearchView(props) {
-  function search(event) {
+class SearchView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      from: null,
+      value: null
+    };
+  }
+
+  search = (event) => {
+    this.setState({ value: event.target.value });
     data.searchStations(event.target.value);
   }
 
-  return (
-    <div className="search">
-      <input className="search-input" type="search" placeholder="Station suchen" onChange={search} />
-      <ul className="search-results">
-        {props.stations.map(s => (
-          <li key={s.key}>{s.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
+  close = (event) => {
+    this.setState({ value: '' });
+    dispatcher.dispatch({ actionType: 'stations:cleared' });
+    return this.props.hide();
+  }
+
+  selectStation = (station) => {
+    this.setState({ value: '' });
+
+    if (!this.state.from) {
+      dispatcher.dispatch({ actionType: 'stations:selected' });
+      return this.setState({ from: station });
+    } else {
+      dispatcher.dispatch({
+        actionType: 'board:created',
+        board: {
+          id: `${this.state.from.key}:${station.key}`,
+          fromId: this.state.from.key,
+          fromName: this.state.from.name,
+          toId: station.key,
+          toName: station.name
+        } 
+      });
+      this.close();
+    }
+  }
+
+  render() {
+    const from = this.state.from ? (<p>Von: {this.state.from.name}</p>) : null;
+    const placeholder = this.state.from ? 'Richtung...' : 'Von...';
+    return ReactDOM.createPortal((
+      <div className="search">
+        <div className="search-container w-100 w-third-l center pa4">
+          <a className="search-close pointer absolute right-1 top-1 f3" onClick={this.close}>&#10006;</a>
+          <h2>Stationen hinzufügen</h2>
+          { from }
+          <input autoFocus className="search-input w-100" value={this.state.value} type="search" placeholder={placeholder} onChange={this.search} />
+          <ul className="search-results list pa0 w-100">
+            {this.props.stations.map(s => (
+              <li key={s.key} onClick={this.selectStation.bind(this, s)}>{s.name}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    ), document.getElementById('search'));
+  }
 }
 
 function BoardView(props) {

@@ -14,7 +14,7 @@ class BoardStore extends ReduceStore {
 
   reduce(state, action) {
     switch (action.actionType) {
-      case 'board:create':
+      case 'board:created':
         return state.add(action.board);
       default:
         return state;
@@ -34,7 +34,7 @@ class DeparturesStore extends ReduceStore {
 
   reduce(state, action) {
     switch (action.actionType) {
-      case 'board:create':
+      case 'board:created':
         let departures = data.departures(action.board.fromId, action.board.toId);
         return state.set(action.board.id, departures);
       case 'departures:retrieved':
@@ -59,6 +59,9 @@ class StationsStore extends ReduceStore {
     switch (action.actionType) {
       case 'stations:retrieved':
         return action.stations;
+      case 'stations:selected':
+      case 'stations:cleared':
+        return state.clear();
       default:
         return state;
     }

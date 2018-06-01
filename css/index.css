@@ -24,6 +24,34 @@ body {
   float: left;
 }
 
+.search {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+}
+
+.search h2 {
+  color: white;
+}
+
+.search input {
+  font-size: 1.5rem;
+}
+
+.search-results li {
+  font-size: 1.5rem;
+  padding: 0.5rem 0;
+  cursor: pointer;
+}
+
+.search-results li:hover {
+  text-decoration: underline;
+}
+
 .board {
   max-height: 50rem;
   overflow-y: scroll;
