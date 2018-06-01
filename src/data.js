@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import Immutable from 'immutable';
+import connected from './connected';
 import dispatcher from './dispatcher';
 import VBB from './vbb';
 
@@ -99,6 +100,11 @@ class Station {
       this.data.location.longitude
     ];
   }
+
+  get connected() {
+    // So nasty. Would love an endpoint for looking this up.
+    return connected[this.data.id];
+  }
 }
 
 const data = {
@@ -123,6 +129,25 @@ const data = {
       });
     });
     return Immutable.Set([Station.fake()]);
+  },
+
+  getStations(ids) {
+    let promises = ids.map(i => {
+      return new Promise(function(resolve, reject) {
+        VBB.getStation(i, function(error, response) {
+          if (error) reject(error);
+          resolve(response.body);
+        });
+      });
+    });
+    Promise.all(promises).then(function(all) {
+      dispatcher.dispatch({
+        actionType: 'stationsVia:retrieved',
+        stations: Immutable.Set(all.map(s => new Station(s)))
+      });
+    }).catch(function(error) {
+      console.log(error);
+    });
   }
 };
 

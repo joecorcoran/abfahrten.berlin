@@ -8,7 +8,7 @@
   "scripts": {
     "build": "webpack ./src/root.js ./bundle.js",
     "watch": "webpack ./src/root.js ./bundle.js --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cache": "node cache.js"
   },
   "dependencies": {
     "classnames": "^2.2.3",
@@ -17,7 +17,6 @@
     "immutable": "^3.8.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "vbb-stations-connected-to": "^1.7.0",
     "xhr": "^2.5.0"
   },
   "devDependencies": {
@@ -35,6 +34,7 @@
     "babel-plugin-transform-regenerator": "^6.5.2",
     "babel-plugin-transform-runtime": "^6.5.2",
     "babel-preset-es2015": "^6.5.0",
+    "vbb-stations-connected-to": "^1.7.0",
     "webpack": "^1.13.0"
   }
 }

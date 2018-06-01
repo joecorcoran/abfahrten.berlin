@@ -72,6 +72,7 @@ class SearchView extends React.Component {
 
     if (!this.state.from) {
       dispatcher.dispatch({ actionType: 'stationSearch:selected' });
+      data.getStations(station.connected);
       return this.setState({ from: station });
     } else {
       dispatcher.dispatch({
@@ -89,20 +90,35 @@ class SearchView extends React.Component {
   }
 
   render() {
-    const from = this.state.from ? (<p>Von: {this.state.from.name}</p>) : null;
-    const placeholder = this.state.from ? 'Richtung...' : 'Von...';
+    const fromSelector = !this.state.from ? (
+      <React.Fragment>
+        <input autoFocus className="search-input w-100" value={this.state.value} type="search" placeholder="Von..." onChange={this.search} />
+        <ul className="search-results list pa0 w-100">
+          {this.props.stationSearch.map(s => (
+            <li key={s.key} onClick={this.selectStation.bind(this, s)}>{s.name}</li>
+          ))}
+        </ul>
+      </React.Fragment>
+    ) : null;
+
+    const viaSelector = this.state.from ? (
+      <React.Fragment>
+        <p>Von: {this.state.from.name}</p>
+        <ul className="search-results list pa0 w-100">
+          {this.props.stationsVia.map(s => (
+            <li key={s.key} onClick={this.selectStation.bind(this, s)}>{s.name}</li>
+          ))}
+        </ul>
+      </React.Fragment>
+    ) : null;
+
     return ReactDOM.createPortal((
       <div className="search">
         <div className="search-container w-100 w-third-l center pa4">
           <a className="search-close pointer absolute right-1 top-1 f3" onClick={this.close}>&#10006;</a>
           <h2>Stationen hinzufügen</h2>
-          { from }
-          <input autoFocus className="search-input w-100" value={this.state.value} type="search" placeholder={placeholder} onChange={this.search} />
-          <ul className="search-results list pa0 w-100">
-            {this.props.stationSearch.map(s => (
-              <li key={s.key} onClick={this.selectStation.bind(this, s)}>{s.name}</li>
-            ))}
-          </ul>
+          { fromSelector }
+          { viaSelector }
         </div>
       </div>
     ), document.getElementById('search'));

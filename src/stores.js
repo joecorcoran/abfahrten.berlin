@@ -69,4 +69,23 @@ class StationSearchStore extends ReduceStore {
   }
 }
 
-export {BoardStore, DeparturesStore, StationSearchStore};
+class StationsViaStore extends ReduceStore {
+  constructor() {
+    super(dispatcher);
+  }
+
+  getInitialState() {
+    return Immutable.Set();
+  }
+
+  reduce(state, action) {
+    switch (action.actionType) {
+      case 'stationsVia:retrieved':
+        return action.stations;
+      default:
+        return state;
+    }
+  }
+}
+
+export {BoardStore, DeparturesStore, StationSearchStore, StationsViaStore};
