@@ -118,7 +118,7 @@ const data = {
     VBB.searchStations(query, function(error, response) {
       if (error) return;
       dispatcher.dispatch({
-        actionType: 'stations:retrieved',
+        actionType: 'stationSearch:retrieved',
         stations: Station.order(response.body.map(s => new Station(s)))
       });
     });

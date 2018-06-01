@@ -46,7 +46,7 @@ class DeparturesStore extends ReduceStore {
   }
 }
 
-class StationsStore extends ReduceStore {
+class StationSearchStore extends ReduceStore {
   constructor() {
     super(dispatcher);
   }
@@ -57,10 +57,10 @@ class StationsStore extends ReduceStore {
 
   reduce(state, action) {
     switch (action.actionType) {
-      case 'stations:retrieved':
+      case 'stationSearch:retrieved':
         return action.stations;
-      case 'stations:selected':
-      case 'stations:cleared':
+      case 'stationSearch:selected':
+      case 'stationSearch:cleared':
         return state.clear();
       default:
         return state;
@@ -69,4 +69,4 @@ class StationsStore extends ReduceStore {
   }
 }
 
-export {BoardStore, DeparturesStore, StationsStore};
+export {BoardStore, DeparturesStore, StationSearchStore};

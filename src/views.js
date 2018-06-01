@@ -23,14 +23,6 @@ class NavView extends React.Component {
     this.state = { showSearch: false };
   }
 
-  start() {
-    // abfahrten.berlin/dashboard?s[]=900000120004|900000120004&s[]=900000120004|900000120003
-    dispatcher.dispatch({
-      actionType: 'board:create',
-      board: { id: `${900000120004}:${900000120003}`, fromId: 900000120004, fromName: 'S+U Warschauer Str.', toId: 900000120003, toName: 'S Ostkreuz' } 
-    });
-  }
-
   showSearch = () => {
     return this.setState({ showSearch: true });
   }
@@ -56,18 +48,22 @@ class SearchView extends React.Component {
     super(props);
     this.state = {
       from: null,
-      value: null
+      value: ''
     };
   }
 
   search = (event) => {
     this.setState({ value: event.target.value });
-    data.searchStations(event.target.value);
+    if (event.target.value.length > 0) {
+      data.searchStations(event.target.value);
+    } else {
+      dispatcher.dispatch({ actionType: 'stationSearch:cleared' });
+    }
   }
 
   close = (event) => {
     this.setState({ value: '' });
-    dispatcher.dispatch({ actionType: 'stations:cleared' });
+    dispatcher.dispatch({ actionType: 'stationSearch:cleared' });
     return this.props.hide();
   }
 
@@ -75,7 +71,7 @@ class SearchView extends React.Component {
     this.setState({ value: '' });
 
     if (!this.state.from) {
-      dispatcher.dispatch({ actionType: 'stations:selected' });
+      dispatcher.dispatch({ actionType: 'stationSearch:selected' });
       return this.setState({ from: station });
     } else {
       dispatcher.dispatch({
@@ -103,7 +99,7 @@ class SearchView extends React.Component {
           { from }
           <input autoFocus className="search-input w-100" value={this.state.value} type="search" placeholder={placeholder} onChange={this.search} />
           <ul className="search-results list pa0 w-100">
-            {this.props.stations.map(s => (
+            {this.props.stationSearch.map(s => (
               <li key={s.key} onClick={this.selectStation.bind(this, s)}>{s.name}</li>
             ))}
           </ul>
