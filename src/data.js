@@ -27,6 +27,14 @@ class Departure {
     this.data = data;
   }
 
+  equals(other) {
+    return this.key === other.key;
+  }
+
+  hashCode() {
+    return parseInt(this.key, 10) | 0;
+  }
+
   get key() {
     return this.data.journeyId;
   }
@@ -80,6 +88,14 @@ class Station {
 
   constructor(data) {
     this.data = data;
+  }
+
+  equals(other) {
+    return this.key === other.key;
+  }
+
+  hashCode() {
+    return parseInt(this.key, 10) | 0;
   }
 
   get key() {
