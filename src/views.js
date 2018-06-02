@@ -188,7 +188,7 @@ class DeparturesView extends React.PureComponent {
           {this.props.departures.map(d => (
             <li key={d.key} className={classnames({ departure: true, 'w-100': true, cancelled: d.isCancelled})}>
               <span className="departure-destination">{d.destination}</span>
-              <span className={classnames('departure-line-num', `departure-line-num--${d.lineNum}`)}>{d.lineNum}</span>
+              <span className={classnames('departure-line-num', `departure-line-num--${d.lineNum}`, `departure-line-product--${d.lineProduct}`)}>{d.lineNum}</span>
               <span className="departure-time">{d.timeText}</span>
             </li>
           ))}

@@ -176,6 +176,20 @@ body {
   top: 0;
 }
 
+.departure-line-product--bus {
+  background-color: rgba(170, 2, 129, 1);
+}
+
+.departure-line-product--tram {
+  background-color: rgba(255, 0, 0, 1);
+}
+
+.departure-line-product--suburban {
+}
+
+.departure-line-product--subway {
+}
+
 .departure-line-num--U1 {
   background-color: rgba(90, 175, 18, 1);
 }
@@ -212,16 +226,40 @@ body {
   background-color: rgba(249, 133, 0, 1);
 }
 
+.departure-line-num--S1 {
+  background-color: rgba(223, 102, 167, 1);
+}
+
+.departure-line-num--S2, .departure-line-num--S25, .departure-line-num--S26 {
+  background-color: rgba(0, 120, 51, 1);
+}
+
 .departure-line-num--S3 {
   background-color: rgba(0, 97, 175, 1);
+}
+
+.departure-line-num--S41 {
+  background-color: rgba(169, 85, 49, 1);
+}
+
+.departure-line-num--S42 {
+  background-color: rgba(208, 99, 0, 1);
+}
+
+.departure-line-num--S45, .departure-line-num--S46, .departure-line-num--S47 {
+  background-color: rgba(207, 157, 71, 1);
 }
 
 .departure-line-num--S5 {
   background-color: rgba(241, 114, 0, 1);
 }
 
-.departure-line-num--S7 {
+.departure-line-num--S7, .departure-line-num--S75 {
   background-color: rgba(132, 105, 175, 1);
+}
+
+.departure-line-num--S8, .departure-line-num--S85 {
+  background-color: rgba(82, 170, 13, 1);
 }
 
 .departure-line-num--S9 {
