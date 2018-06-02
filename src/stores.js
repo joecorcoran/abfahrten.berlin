@@ -35,8 +35,13 @@ class DeparturesStore extends ReduceStore {
   reduce(state, action) {
     switch (action.actionType) {
       case 'board:created':
+        // Set fake departures while we wait
         let departures = data.departures(action.board.fromId, action.board.toId);
         return state.set(action.board.id, departures);
+      case 'board:tick':
+        // Leave current state alone while we wait
+        data.departures(action.board.fromId, action.board.toId);
+        return state;
       case 'departures:retrieved':
         return state.set(action.boardId, action.departures);
       default:

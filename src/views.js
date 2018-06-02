@@ -7,17 +7,17 @@ import dispatcher from './dispatcher';
 function AppView(props) {
   return (
     <div>
-      <NavView {...props} />
+      <NavView stationSearch={props.stationSearch} stationsVia={props.stationsVia} />
       <div className="flex flex-wrap mw9 center cf">
         {props.boards.map(b => (
-          <BoardView key={b.id} departures={props.departures.get(b.id) || []} {...b} />
+          <BoardView key={b.id} departures={props.departures.get(b.id) || []} board={b} />
         ))}
       </div>
     </div>
   );
 }
 
-class NavView extends React.Component {
+class NavView extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = { showSearch: false };
@@ -139,38 +139,63 @@ class SearchView extends React.Component {
   }
 }
 
-function BoardView(props) {
-  return (
-    <section className="board fl w-100 w-third-l">
-      <HeaderView {...props} />
-      <DeparturesView {...props} />
-    </section>
-  );
-};
+class BoardView extends React.PureComponent {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <section className="board fl w-100 w-third-l">
+        <HeaderView {...this.props} />
+        <DeparturesView {...this.props} />
+      </section>
+    );
+  }
+}
 
 function HeaderView(props) {
   return (
     <header className="station">
-      <h2 className="station-name">{props.fromName}</h2>
-      <p className="station-direction">Richtung {props.toName}</p>
+      <h2 className="station-name">{props.board.fromName}</h2>
+      <p className="station-direction">Richtung {props.board.toName}</p>
     </header>
   );
-};
+}
 
-function DeparturesView(props) {
-  return (
-    <section className="departures">
-      <ul className="w-100 pa0 ma0">
-        {props.departures.map(d => (
-          <li key={d.key} className={classnames({ departure: true, 'w-100': true, cancelled: d.isCancelled})}>
-            <span className="departure-destination">{d.destination}</span>
-            <span className={classnames('departure-line-num', `departure-line-num--${d.lineNum}`)}>{d.lineNum}</span>
-            <span className="departure-time">{d.timeText}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-};
+class DeparturesView extends React.PureComponent {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.ticker = setInterval(() => {
+      dispatcher.dispatch({
+        actionType: 'board:tick',
+        board: this.props.board
+      });
+    }, 20000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.ticker);
+  }
+
+  render() {
+    return (
+      <section className="departures">
+        <ul className="w-100 pa0 ma0">
+          {this.props.departures.map(d => (
+            <li key={d.key} className={classnames({ departure: true, 'w-100': true, cancelled: d.isCancelled})}>
+              <span className="departure-destination">{d.destination}</span>
+              <span className={classnames('departure-line-num', `departure-line-num--${d.lineNum}`)}>{d.lineNum}</span>
+              <span className="departure-time">{d.timeText}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  }
+}
 
 export {AppView, NavView, BoardView, HeaderView, DeparturesView};
