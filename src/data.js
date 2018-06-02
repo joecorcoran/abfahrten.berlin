@@ -40,7 +40,7 @@ class Departure {
   }
 
   get lineNum() {
-    return this.data.line.name;
+    return this.data.line.name.replace(/Tram |Bus /, '');
   }
 
   get destination() {

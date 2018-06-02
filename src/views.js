@@ -35,8 +35,8 @@ class NavView extends React.Component {
     const search = this.state.showSearch ? (<SearchView {...this.props} hide={this.hideSearch} />) : null;
     return (
       <header className="nav">
-        <h1 className="nav-heading">abfahrten.berlin</h1>
-        <a className="nav-search-link pointer underline" onClick={this.showSearch}>Abfahrtstafel erstellen</a>
+        <h1 className="nav-heading w-100 tc tl-l w-auto-l fl-l">abfahrten.berlin</h1>
+        <button className="nav-search-link w-100 w-auto-l fr-l mt3 mt0-l" onClick={this.showSearch}>Abfahrtstafel erstellen</button>
         { search }
       </header>
     );
@@ -90,23 +90,37 @@ class SearchView extends React.Component {
   }
 
   render() {
+    let fromTabIndex = 0;
+    let viaTabIndex = 0;
+
     const fromSelector = !this.state.from ? (
       <React.Fragment>
-        <input autoFocus className="search-input w-100" value={this.state.value} type="search" placeholder="Von..." onChange={this.search} />
+        <input tabIndex={fromTabIndex} autoFocus className="search-input w-100" value={this.state.value} type="search" placeholder="Von..." onChange={this.search} />
         <ul className="search-results list pa0 w-100">
           {this.props.stationSearch.map(s => (
-            <li key={s.key} onClick={this.selectStation.bind(this, s)}>{s.name}</li>
+            <li key={s.key}>
+	      <button role="menuitem" tabIndex={fromTabIndex} onClick={this.selectStation.bind(this, s)}>
+		{s.name}
+	      </button>
+            </li>
           ))}
         </ul>
       </React.Fragment>
     ) : null;
 
+    let viaCounter = 0;
     const viaSelector = this.state.from ? (
       <React.Fragment>
-        <p>Von: {this.state.from.name}</p>
+        <h3>Von</h3>
+        <p>{this.state.from.name}</p>
+        <h3>Richtung</h3>
         <ul className="search-results list pa0 w-100">
           {this.props.stationsVia.map(s => (
-            <li key={s.key} onClick={this.selectStation.bind(this, s)}>{s.name}</li>
+            <li key={s.key}>
+	      <button role="menuitem" tabIndex={viaTabIndex} autoFocus={viaCounter++ === 0} onClick={this.selectStation.bind(this, s)}>
+		{s.name}
+	      </button>
+            </li>
           ))}
         </ul>
       </React.Fragment>
@@ -115,7 +129,7 @@ class SearchView extends React.Component {
     return ReactDOM.createPortal((
       <div className="search">
         <div className="search-container w-100 w-third-l center pa4">
-          <a className="search-close pointer absolute right-1 top-1 f3" onClick={this.close}>&#10006;</a>
+          <button className="search-close" onClick={this.close}>&#10006;</button>
           <h2>Stationen hinzufügen</h2>
           { fromSelector }
           { viaSelector }

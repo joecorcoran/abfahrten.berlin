@@ -20,8 +20,22 @@ body {
 .nav-heading {
   margin: 0;
   padding: 0;
-  width: 40%;
-  float: left;
+}
+
+.nav-search-link {
+  float: right;
+  background: black;
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border: black;
+  border-radius: 0.2rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nav-search-link:hover {
+  background: rgba(50, 50, 50, 1);
 }
 
 .search {
@@ -30,7 +44,7 @@ body {
   left: 0;
   bottom: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.95);
   color: white;
 }
 
@@ -38,18 +52,55 @@ body {
   color: white;
 }
 
+.search-close {
+  cursor: pointer;
+  color: white;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  padding: 0.35rem 0.5rem 0rem;
+  margin: 0;
+  line-height: 2rem;
+  border-radius: 0.2rem;
+}
+
+.search-close:hover {
+  background: rgba(50, 50, 50, 1);
+}
+
 .search input {
   font-size: 1.5rem;
+  outline: none;
+  padding: 0.5rem;
+}
+
+.search-results {
+  padding; 0;
+  margin: 0;
 }
 
 .search-results li {
   font-size: 1.5rem;
-  padding: 0.5rem 0;
+  padding: 0;
+}
+
+.search-results li button {
+  background: black;
+  border: 0;
+  color: white;
+  width: 100%;
+  text-align: left;
+  padding: 0.7rem 1rem 0.5rem;
+  line-height: 1.5rem;
   cursor: pointer;
 }
 
-.search-results li:hover {
-  text-decoration: underline;
+.search-results li button:hover, .search-results li button:focus {
+  background: rgba(50, 50, 50, 1);
+  outline: none;
 }
 
 .board {
@@ -123,6 +174,42 @@ body {
 
 .departure:first-child .departure-time {
   top: 0;
+}
+
+.departure-line-num--U1 {
+  background-color: rgba(90, 175, 18, 1);
+}
+
+.departure-line-num--U2 {
+  background-color: rgba(239, 71, 0, 1);
+}
+
+.departure-line-num--U3 {
+  background-color: rgba(0, 159, 147, 1);
+}
+
+.departure-line-num--U4 {
+  background-color: rgba(254, 229, 0, 1);
+}
+
+.departure-line-num--U5 {
+  background-color: rgba(116, 75, 35, 1);
+}
+
+.departure-line-num--U6 {
+  background-color: rgba(134, 108, 175, 1);
+}
+
+.departure-line-num--U7 {
+  background-color: rgba(130, 104, 173, 1);
+}
+
+.departure-line-num--U8 {
+  background-color: rgba(0, 92, 169, 1);
+}
+
+.departure-line-num--U9 {
+  background-color: rgba(249, 133, 0, 1);
 }
 
 .departure-line-num--S3 {
