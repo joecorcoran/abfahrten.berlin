@@ -112,6 +112,19 @@ body {
 .station {
   padding: 0.75rem;
   border-bottom: 1px solid rgba(200, 200, 200, 1);
+  position: relative;
+}
+
+.station-text {
+  padding-right: 50px;
+}
+
+.station-loader {
+  position: absolute;
+  top: 0.75rem;
+  right: 0;
+  height: 3rem;
+  width: 3rem;
 }
 
 .station-name {
@@ -264,4 +277,36 @@ body {
 
 .departure-line-num--S9 {
   background-color: rgba(158, 38, 71, 1);
+}
+
+.loader {
+  width: inherit;
+  height: inherit;
+}
+
+.loader--loading {
+  background-color: #333;
+
+  border-radius: 100%;
+  -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+  animation: sk-scaleout 1.0s infinite ease-in-out;
+}
+
+@-webkit-keyframes sk-scaleout {
+  0% { -webkit-transform: scale(0) }
+  100% {
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
+}
+
+@keyframes sk-scaleout {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 100% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+    opacity: 0;
+  }
 }

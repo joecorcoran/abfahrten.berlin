@@ -10,7 +10,10 @@ function AppView(props) {
       <NavView stationSearch={props.stationSearch} stationsVia={props.stationsVia} />
       <div className="flex flex-wrap mw9 center cf">
         {props.boards.map(b => (
-          <BoardView key={b.id} departures={props.departures.get(b.id) || []} board={b} />
+          <BoardView key={b.id}
+            loading={props.departures.get(b.id).get('loading')}
+            departures={props.departures.get(b.id).get('departures') || []}
+            board={b} />
         ))}
       </div>
     </div>
@@ -157,8 +160,13 @@ class BoardView extends React.PureComponent {
 function HeaderView(props) {
   return (
     <header className="station">
-      <h2 className="station-name">{props.board.fromName}</h2>
-      <p className="station-direction">Richtung {props.board.toName}</p>
+      <div className="station-text">
+        <h2 className="station-name">{props.board.fromName}</h2>
+        <p className="station-direction">Richtung {props.board.toName}</p>
+      </div>
+      <div className="station-loader">
+        <div className={classnames({ loader: true, 'loader--loading': props.loading })}></div>
+      </div>
     </header>
   );
 }
