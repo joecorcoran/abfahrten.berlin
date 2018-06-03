@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import Immutable from 'immutable';
+import {Set} from 'immutable';
 import connected from './connected';
 import dispatcher from './dispatcher';
 import VBB from './vbb';
@@ -15,8 +15,12 @@ class Departure {
     });
   }
 
+  static none() {
+    return Set();
+  }
+
   static order(set) {
-    return Immutable.Set(set).sort((a, b) => {
+    return Set(set).sort((a, b) => {
       if (a.time < b.time) return -1;
       if (a.time > b.time) return 1;
       if (a.time === b.time) return 0;
@@ -82,8 +86,12 @@ class Station {
     return new Station();
   }
 
+  static none() {
+    return Set();
+  }
+
   static order(set) {
-    return Immutable.Set(set).sort((a, b) => {
+    return Set(set).sort((a, b) => {
       if (a.relevance > b.relevance) return -1;
       if (a.relevance < b.relevance) return 1;
       if (a.relevance === b.relevance) return 0;
@@ -130,25 +138,23 @@ class Station {
 const data = {
   departures(fromId, toId) {
     VBB.getDepartures(fromId, toId, function(error, response) {
-      if (error) return;
       dispatcher.dispatch({
         actionType: 'departures:retrieved',
         boardId: `${fromId}:${toId}`,
-        departures: Departure.order(response.body.map(d => new Departure(d)))
+        departures: error ? Departure.none() : Departure.order(response.body.map(d => new Departure(d)))
       });
     });
-    return Immutable.Set([Departure.fake()]);
+    return Set([Departure.fake()]);
   },
 
   searchStations(query) {
     VBB.searchStations(query, function(error, response) {
-      if (error) return;
       dispatcher.dispatch({
         actionType: 'stationSearch:retrieved',
-        stations: Station.order(response.body.map(s => new Station(s)))
+        stations: error ? Station.none() : Station.order(response.body.map(s => new Station(s)))
       });
     });
-    return Immutable.Set([Station.fake()]);
+    return Set([Station.fake()]);
   },
 
   getStations(ids) {
@@ -163,10 +169,13 @@ const data = {
     Promise.all(promises).then(function(all) {
       dispatcher.dispatch({
         actionType: 'stationsVia:retrieved',
-        stations: Immutable.Set(all.map(s => new Station(s)))
+        stations: Set(all.map(s => new Station(s)))
       });
     }).catch(function(error) {
-      console.log(error);
+      dispatcher.dispatch({
+        actionType: 'stationsVia:retrieved',
+        stations: Station.none()
+      });
     });
   }
 };

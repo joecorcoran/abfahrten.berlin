@@ -37,9 +37,12 @@ class NavView extends React.PureComponent {
   render() {
     const search = this.state.showSearch ? (<SearchView {...this.props} hide={this.hideSearch} />) : null;
     return (
-      <header className="nav">
-        <h1 className="nav-heading w-100 tc tl-l w-auto-l fl-l">abfahrten.berlin</h1>
-        <button className="nav-search-link w-100 w-auto-l fr-l mt3 mt0-l" onClick={this.showSearch}>Abfahrtstafel erstellen</button>
+      <header className="nav mw9 center flex flex-column flex-row-l">
+        <h1 className="nav-heading tc tl-l">abfahrten</h1>
+        <ul className="nav-menu list pa0 pl3-l ml0 ml3-l tc tl-l flex-grow-1 flex flex-column flex-row-l">
+          <li className=""><a>Worum geht es?</a></li>
+        </ul>
+        <button className="nav-search-link" onClick={this.showSearch}>Abfahrtstafel erstellen</button>
         { search }
       </header>
     );
@@ -102,7 +105,7 @@ class SearchView extends React.Component {
         <ul className="search-results list pa0 w-100">
           {this.props.stationSearch.map(s => (
             <li key={s.key}>
-	      <button role="menuitem" tabIndex={fromTabIndex} onClick={this.selectStation.bind(this, s)}>
+              <button role="menuitem" tabIndex={fromTabIndex} onMouseOver={(e) => { e.target.focus() }} onClick={this.selectStation.bind(this, s)}>
 		{s.name}
 	      </button>
             </li>
@@ -120,7 +123,7 @@ class SearchView extends React.Component {
         <ul className="search-results list pa0 w-100">
           {this.props.stationsVia.map(s => (
             <li key={s.key}>
-	      <button role="menuitem" tabIndex={viaTabIndex} autoFocus={viaCounter++ === 0} onClick={this.selectStation.bind(this, s)}>
+	      <button role="menuitem" tabIndex={viaTabIndex} onMouseOver={(e) => { e.target.focus() }} autoFocus={viaCounter++ === 0} onClick={this.selectStation.bind(this, s)}>
 		{s.name}
 	      </button>
             </li>
@@ -190,8 +193,10 @@ class DeparturesView extends React.PureComponent {
   }
 
   render() {
+    const none = (this.props.departures.length === 0) ? (<p className="departures-none">Es wurden keine Abfahrten für diese Strecke gefunden.</p>) : null;
     return (
       <section className="departures">
+        {none}
         <ul className="w-100 pa0 ma0">
           {this.props.departures.map(d => (
             <li key={d.key} className={classnames({ departure: true, 'w-100': true, cancelled: d.isCancelled})}>

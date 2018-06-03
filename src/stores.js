@@ -1,4 +1,4 @@
-import Immutable from 'immutable';
+import {Set, Map} from 'immutable';
 import {ReduceStore} from 'flux/utils';
 import data from './data';
 import dispatcher from './dispatcher';
@@ -9,7 +9,7 @@ class BoardStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Immutable.Set();
+    return Set();
   }
 
   reduce(state, action) {
@@ -29,7 +29,7 @@ class DeparturesStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Immutable.Map();
+    return Map();
   }
 
   reduce(state, action) {
@@ -37,19 +37,19 @@ class DeparturesStore extends ReduceStore {
       case 'board:created':
         // Set fake departures while we wait
         let departures = data.departures(action.board.fromId, action.board.toId);
-        return state.set(action.board.id, Immutable.Map({
+        return state.set(action.board.id, Map({
           loading: true,
           departures: departures
         }));
       case 'board:tick':
         // Leave current departures alone while we wait
         data.departures(action.board.fromId, action.board.toId);
-        return state.set(action.board.id, Immutable.Map({
+        return state.set(action.board.id, Map({
           loading: true,
           departures: state.get(action.board.id).get('departures')
         }));
       case 'departures:retrieved':
-        return state.set(action.boardId, Immutable.Map({
+        return state.set(action.boardId, Map({
           loading: false,
           departures: action.departures
         }));
@@ -66,7 +66,7 @@ class StationSearchStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Immutable.Set();
+    return Set();
   }
 
   reduce(state, action) {
@@ -89,7 +89,7 @@ class StationsViaStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Immutable.Set();
+    return Set();
   }
 
   reduce(state, action) {

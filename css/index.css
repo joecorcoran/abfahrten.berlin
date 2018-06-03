@@ -1,7 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
+
 html {
   margin: 0;
   padding: 0;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  background: rgb(242, 241, 239);
+  color: rgb(25, 25, 25);
 }
 
 body {
@@ -11,31 +15,37 @@ body {
 
 .nav {
   width: 100%;
-  background: rgba(230, 230, 230, 1);
   margin: 0;
-  padding: 1rem 0.5rem;
-  display: inline-block;
+  padding: 1rem 0.75rem;
+  background: rgb(189, 0, 0);;
+  box-shadow: 0 0 0 0.2rem rgba(189, 0, 0, 0.3);
+  color: rgb(253, 227, 167);
 }
 
 .nav-heading {
   margin: 0;
   padding: 0;
+  font-family: 'Pacifico', cursive;
+  padding-top: 0.2rem;
+}
+
+.nav-menu {
+  padding-top: 0.2rem;
 }
 
 .nav-search-link {
-  float: right;
-  background: black;
-  color: white;
+  background: rgb(242, 241, 239);
+  color: rgb(189, 0, 0);;
   text-decoration: none;
   padding: 0.75rem 1rem;
-  border: black;
+  border: rgb(242, 241, 239);
   border-radius: 0.2rem;
   font-weight: 600;
   cursor: pointer;
 }
 
 .nav-search-link:hover {
-  background: rgba(50, 50, 50, 1);
+  text-decoration: underline;
 }
 
 .search {
@@ -44,12 +54,11 @@ body {
   left: 0;
   bottom: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.95);
-  color: white;
+  background: rgba(189, 0, 0, 0.9);
+  color: rgb(253, 227, 167);
 }
 
 .search h2 {
-  color: white;
 }
 
 .search-close {
@@ -88,9 +97,9 @@ body {
 }
 
 .search-results li button {
-  background: black;
+  background: rgba(105, 0, 0, 1);
   border: 0;
-  color: white;
+  color: rgb(253, 227, 167);
   width: 100%;
   text-align: left;
   padding: 0.7rem 1rem 0.5rem;
@@ -99,7 +108,8 @@ body {
 }
 
 .search-results li button:hover, .search-results li button:focus {
-  background: rgba(50, 50, 50, 1);
+  background: rgb(242, 241, 239);
+  color: rgb(189, 0, 0);;
   outline: none;
 }
 
@@ -130,6 +140,7 @@ body {
 .station-name {
   margin: 0 0 0.2rem;
   padding: 0;
+  color: rgb(189, 0, 0);
 }
 
 .station-direction {
@@ -138,7 +149,14 @@ body {
 }
 
 .departures {
-  padding: 0.5rem 0.75rem;
+  padding: 0 0.75rem 0.5rem;
+}
+
+.departures-none {
+}
+
+.departures ul {
+  padding-top: 0.5rem;
 }
 
 .departure {
@@ -156,7 +174,7 @@ body {
 }
 
 .departure-destination {
-  padding: 0 15% 0 calc(1.75rem + 1rem); /* right padding is width of line-num plus some space */
+  padding: 0 15% 0 calc(1.75rem + 1.5rem); /* right padding is width of line-num plus some space */
   line-height: 1.4rem;
   display: inline-block;
 }
@@ -171,7 +189,7 @@ body {
   border-radius: 0.2rem;
   padding: 0.1rem 0.2rem;
   font-weight: 500;
-  min-width: 1.75rem;
+  min-width: 2rem;
   text-align: center;
   position: absolute;
   left: 0;
@@ -198,9 +216,11 @@ body {
 }
 
 .departure-line-product--suburban {
+  border-radius: 1rem;
 }
 
 .departure-line-product--subway {
+  border-radius: 0;
 }
 
 .departure-line-num--U1 {
@@ -285,7 +305,7 @@ body {
 }
 
 .loader--loading {
-  background-color: #333;
+  background: rgb(189, 0, 0);
 
   border-radius: 100%;
   -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
