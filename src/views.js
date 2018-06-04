@@ -7,7 +7,10 @@ import dispatcher from './dispatcher';
 function AppView(props) {
   return (
     <div>
-      <NavView stationSearch={props.stationSearch} stationsVia={props.stationsVia} />
+      <NavView stationSearchLoading={props.stationSearch.get('loading')}
+        stationSearch={props.stationSearch.get('stations')}
+        stationsViaLoading={props.stationsVia.get('loading')}
+        stationsVia={props.stationsVia.get('stations')} />
       <div className="flex flex-wrap mw9 center cf">
         {props.boards.map(b => (
           <BoardView key={b.id}
@@ -61,7 +64,10 @@ class SearchView extends React.Component {
   search = (event) => {
     this.setState({ value: event.target.value });
     if (event.target.value.length > 0) {
-      data.searchStations(event.target.value);
+      dispatcher.dispatch({
+        actionType: 'stationSearch:requested',
+        stations: data.searchStations(event.target.value)
+      });
     } else {
       dispatcher.dispatch({ actionType: 'stationSearch:cleared' });
     }
@@ -78,7 +84,10 @@ class SearchView extends React.Component {
 
     if (!this.state.from) {
       dispatcher.dispatch({ actionType: 'stationSearch:selected' });
-      data.getStations(station.connected);
+      dispatcher.dispatch({
+        actionType: 'stationsVia:requested',
+        stations: data.getStations(station.connected)
+      });
       return this.setState({ from: station });
     } else {
       dispatcher.dispatch({
@@ -101,34 +110,46 @@ class SearchView extends React.Component {
 
     const fromSelector = !this.state.from ? (
       <React.Fragment>
-        <input tabIndex={fromTabIndex} autoFocus className="search-input w-100" value={this.state.value} type="search" placeholder="Von..." onChange={this.search} />
-        <ul className="search-results list pa0 w-100">
-          {this.props.stationSearch.map(s => (
-            <li key={s.key}>
-              <button role="menuitem" tabIndex={fromTabIndex} onMouseOver={(e) => { e.target.focus() }} onClick={this.selectStation.bind(this, s)}>
-		{s.name}
-	      </button>
-            </li>
-          ))}
-        </ul>
+        <form autocomplete="off">
+          <label htmlFor="search-input-from">Von</label>
+          <input name="search-input-from"
+            tabIndex={fromTabIndex}
+            autoFocus
+            className="search-input w-100"
+            value={this.state.value}
+            type="search"
+            placeholder="S Ostkreuz"
+            onChange={this.search} />
+        </form>
+        <div className="search-results-container">
+          <ul className="search-results list pa0 w-100">
+            {this.props.stationSearch.map(s => (
+              <li key={s.key}>
+                <button role="menuitem" tabIndex={fromTabIndex} onMouseOver={(e) => { e.target.focus() }} onClick={this.selectStation.bind(this, s)}>
+                  {s.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       </React.Fragment>
     ) : null;
 
     let viaCounter = 0;
     const viaSelector = this.state.from ? (
       <React.Fragment>
-        <h3>Von</h3>
-        <p>{this.state.from.name}</p>
-        <h3>Richtung</h3>
-        <ul className="search-results list pa0 w-100">
-          {this.props.stationsVia.map(s => (
-            <li key={s.key}>
-	      <button role="menuitem" tabIndex={viaTabIndex} onMouseOver={(e) => { e.target.focus() }} autoFocus={viaCounter++ === 0} onClick={this.selectStation.bind(this, s)}>
-		{s.name}
-	      </button>
-            </li>
-          ))}
-        </ul>
+        <h3>Über</h3>
+        <div className="search-results-container">
+          <ul className="search-results list pa0 w-100">
+            {this.props.stationsVia.map(s => (
+              <li key={s.key}>
+                <button role="menuitem" tabIndex={viaTabIndex} onMouseOver={(e) => { e.target.focus() }} autoFocus={viaCounter++ === 0} onClick={this.selectStation.bind(this, s)}>
+                  {s.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       </React.Fragment>
     ) : null;
 
@@ -136,7 +157,13 @@ class SearchView extends React.Component {
       <div className="search">
         <div className="search-container w-100 w-third-l center pa4">
           <button className="search-close" onClick={this.close}>&#10006;</button>
-          <h2>Stationen hinzufügen</h2>
+          <header className="search-header flex">
+            <h2 className="flex-grow-1">Stationen hinzufügen</h2>
+            <div className="search-loader">
+              <div className={classnames({ loader: true, 'loader--loading': this.props.stationSearchLoading || this.props.stationsViaLoading })}></div>
+            </div>
+          </header>
+          <h3>Von <span className="search-from-name">{this.state.from && this.state.from.name}</span></h3>
           { fromSelector }
           { viaSelector }
         </div>

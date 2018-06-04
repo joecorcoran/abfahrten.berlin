@@ -9,7 +9,7 @@ class Departure {
     return new Departure({
       journeyId: '',
       line: { name: '••' },
-      direction: 'Loading...',
+      direction: 'Wird geladen\u2026',
       when: null,
       cancelled: false
     });
@@ -154,7 +154,7 @@ const data = {
         stations: error ? Station.none() : Station.order(response.body.map(s => new Station(s)))
       });
     });
-    return Set([Station.fake()]);
+    return Set();
   },
 
   getStations(ids) {
@@ -177,6 +177,7 @@ const data = {
         stations: Station.none()
       });
     });
+    return Set();
   }
 };
 

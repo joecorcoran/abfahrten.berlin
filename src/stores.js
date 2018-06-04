@@ -66,16 +66,24 @@ class StationSearchStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Set();
+    return Map({ stations: Set(), loading: false });
   }
 
   reduce(state, action) {
     switch (action.actionType) {
+      case 'stationSearch:requested':
+        return Map({
+          stations: action.stations,
+          loading: true
+        });
       case 'stationSearch:retrieved':
-        return action.stations;
+        return Map({
+          stations: action.stations,
+          loading: false
+        });
       case 'stationSearch:selected':
       case 'stationSearch:cleared':
-        return state.clear();
+        return Map({ stations: Set(), loading: false });
       default:
         return state;
     }
@@ -89,13 +97,21 @@ class StationsViaStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Set();
+    return Map({ stations: Set(), loading: false });
   }
 
   reduce(state, action) {
     switch (action.actionType) {
+      case 'stationsVia:requested':
+        return Map({
+          stations: action.stations,
+          loading: true
+        });
       case 'stationsVia:retrieved':
-        return action.stations;
+        return Map({
+          stations: action.stations,
+          loading: false
+        });
       default:
         return state;
     }
