@@ -40,13 +40,15 @@ class NavView extends React.PureComponent {
   render() {
     const search = this.state.showSearch ? (<SearchView {...this.props} hide={this.hideSearch} />) : null;
     return (
-      <header className="nav mw9 center flex flex-column flex-row-l">
-        <h1 className="nav-heading tc tl-l">abfahrten</h1>
-        <ul className="nav-menu list pa0 pl3-l ml0 ml3-l tc tl-l flex-grow-1 flex flex-column flex-row-l">
-          <li className=""><a>Worum geht es?</a></li>
-        </ul>
-        <button className="nav-search-link" onClick={this.showSearch}>Abfahrtstafel erstellen</button>
-        { search }
+      <header className="nav">
+        <div className="nav-container mw9 center flex flex-column flex-row-l">
+          <h1 className="nav-heading tc tl-l">abfahrten</h1>
+          <ul className="nav-menu list pa0 pl3-l ml0 ml3-l tc tl-l flex-grow-1 flex flex-column flex-row-l">
+            <li className=""><a>Worum geht es?</a></li>
+          </ul>
+          <button className="nav-search-link" onClick={this.showSearch}>Abfahrtstafel erstellen</button>
+          { search }
+        </div>
       </header>
     );
   }

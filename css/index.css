@@ -28,6 +28,10 @@ body {
   color: rgb(253, 227, 167);
 }
 
+.nav-container {
+  padding: 0 0.75rem;
+}
+
 .nav-heading {
   margin: 0;
   padding: 0;
