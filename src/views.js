@@ -220,7 +220,7 @@ class DeparturesView extends React.PureComponent {
   }
 
   render() {
-    const none = (this.props.departures.length === 0) ? (<p className="departures-none">Es wurden keine Abfahrten für diese Strecke gefunden.</p>) : null;
+    const none = (this.props.departures.isEmpty()) ? (<p className="departures-none">Es wurden keine Abfahrten für diese Strecke gefunden.</p>) : null;
     return (
       <section className="departures">
         {none}
