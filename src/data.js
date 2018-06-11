@@ -4,6 +4,20 @@ import connected from './connected';
 import dispatcher from './dispatcher';
 import VBB from './vbb';
 
+class Line {
+  constructor(data) {
+    this.data = data;
+  }
+
+  get lineNum() {
+    return this.data.name.replace(/Tram |Bus /, '');
+  }
+
+  get lineProduct() {
+    return this.data.product;
+  }
+}
+
 class Departure {
   static fake() {
     return new Departure({
@@ -29,6 +43,7 @@ class Departure {
 
   constructor(data) {
     this.data = data;
+    this.line = new Line(data.line);
   }
 
   equals(other) {
@@ -44,11 +59,11 @@ class Departure {
   }
 
   get lineNum() {
-    return this.data.line.name.replace(/Tram |Bus /, '');
+    return this.line.num;
   }
 
   get lineProduct() {
-    return this.data.line.product;
+    return this.line.product;
   }
 
   get destination() {
@@ -100,6 +115,7 @@ class Station {
 
   constructor(data) {
     this.data = data;
+    this.lines = data.lines ? Set(data.lines.map(l => new Line(l))) : Set();
   }
 
   equals(other) {
@@ -136,6 +152,10 @@ class Station {
   get connected() {
     // So nasty. Would love an endpoint for looking this up.
     return connected[this.data.id];
+  }
+
+  get lines() {
+    return this.lines;
   }
 }
 

@@ -18,7 +18,7 @@ class AppView extends React.Component {
 
   render() {
     const getStarted = <p className="get-started">
-      Du hast noch keine Abfahrtstafeln erstellt. <a onClick={this.showSearch}>Lass uns loslegen</a>!
+      Du hast noch keine Abfahrtstafeln erstellt. <a onClick={this.showSearch}>Lass uns loslegen!</a>
     </p>;
     return (
       <div>
