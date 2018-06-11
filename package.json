@@ -17,6 +17,7 @@
     "immutable": "^3.8.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "screenfull": "^3.3.2",
     "throttle-debounce": "^2.0.0",
     "xhr": "^2.5.0"
   },

@@ -2,6 +2,7 @@ import classnames from 'classnames';
 import {debounce} from 'throttle-debounce';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import screenfull from 'screenfull';
 import data from './data';
 import dispatcher from './dispatcher';
 
@@ -44,7 +45,7 @@ class AppView extends React.Component {
 class NavView extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { showSearch: false };
+    this.state = { showSearch: false, fullscreen: false };
   }
 
   showSearch = () => {
@@ -55,16 +56,27 @@ class NavView extends React.PureComponent {
     return this.setState({ showSearch: false });
   }
 
+  handleFullscreen = () => {
+    this.setState({ fullscreen: !this.state.fullscreen }, () => {
+      screenfull.toggle();
+    });
+  }
+
   render() {
     const search = this.state.showSearch ? (<SearchView {...this.props} hide={this.hideSearch} />) : null;
+    const fullscreen = screenfull.enabled ? (
+      <button className="nav-big-button mb2 mb0-l" onClick={this.handleFullscreen}>
+        <i class="fas fa-expand"></i>&nbsp; {this.state.fullscreen ? 'Vollbild beenden' : 'Vollbild'}
+      </button>
+    ) : null;
     return (
       <header className="nav">
         <div className="nav-container mw9 center flex flex-column flex-row-l">
-          <h1 className="nav-heading tc tl-l">abfahrten</h1>
-          <ul className="nav-menu list pa0 pl3-l ml0 ml3-l tc tl-l flex-grow-1 flex flex-column flex-row-l">
-            <li className=""><a>Worum geht es?</a></li>
-          </ul>
-          <button className="nav-search-link" onClick={this.showSearch}>Abfahrtstafel erstellen</button>
+          <h1 className="nav-heading tc tl-l mb3 mb0-l flex-grow-1 flex-row-l">abfahrten</h1>
+          {fullscreen}
+          <button className="nav-big-button ml2-l" onClick={this.showSearch}>
+            <i class="fas fa-th-list"></i>&nbsp; Abfahrtstafel erstellen
+          </button>
           { search }
         </div>
       </header>

@@ -25,7 +25,8 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([
-      path.resolve(__dirname, 'css', '*.css')
+      path.resolve(__dirname, 'css', '*'),
+      path.resolve(__dirname, 'webfonts', '*')
     ]),
     new HtmlWebpackPlugin({
       title: 'abfahrten.berlin',
