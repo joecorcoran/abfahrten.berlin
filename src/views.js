@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import {debounce} from 'throttle-debounce';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import data from './data';
@@ -80,17 +81,23 @@ class SearchView extends React.Component {
     };
   }
 
-  search = (event) => {
-    this.setState({ value: event.target.value });
-    if (event.target.value.length > 0) {
+  handleChange = (event) => {
+    this.setState({ value: event.target.value }, () => {
+      this.search(this.state.value);
+    });
+  }
+
+  search = debounce(300, (q) => {
+    this.setState({ value: q });
+    if (q.length > 0) {
       dispatcher.dispatch({
         actionType: 'stationSearch:requested',
-        stations: data.searchStations(event.target.value)
+        stations: data.searchStations(q)
       });
     } else {
       dispatcher.dispatch({ actionType: 'stationSearch:cleared' });
     }
-  }
+  })
 
   close = (event) => {
     this.setState({ value: '' });
@@ -138,7 +145,7 @@ class SearchView extends React.Component {
             value={this.state.value}
             type="search"
             placeholder="S Ostkreuz"
-            onChange={this.search} />
+            onChange={this.handleChange} />
         </form>
         <div className="search-results-container">
           <ul className="search-results list pa0 w-100">
