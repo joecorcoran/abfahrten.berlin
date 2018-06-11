@@ -403,3 +403,22 @@ body {
     opacity: 0;
   }
 }
+
+.footer {
+  position: fixed;
+  width: 100%;
+  text-align: center;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.4);
+  color: rgb(100, 100, 100);
+  font-size: 0.8rem;
+}
+
+.footer a {
+  color: rgb(100, 100, 100);
+  text-decoration: underline;
+}
+
+.footer a:hover {
+  text-decoration: none;
+}

@@ -37,6 +37,7 @@ class AppView extends React.Component {
             ))
           )}
         </div>
+        <div className="footer"><p>Worum geht das? • <a href="https://github.com/joecorcoran/abfahrten.berlin" target="_blank">Code</a> • <a href="https://github.com/joecorcoran/abfahrten.berlin/blob/master/LICENSE.md" target="_blank">PPL</a></p></div>
       </div>
     );
   }
