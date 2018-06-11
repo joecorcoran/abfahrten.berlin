@@ -176,7 +176,7 @@ class SearchView extends React.Component {
     let viaCounter = 0;
     const viaSelector = this.state.from ? (
       <React.Fragment>
-        <h3>Über</h3>
+        <h3><i class="fas fa-arrow-right"></i>&nbsp; Über</h3>
         <div className="search-results-container">
           <ul className="search-results list pa0 w-100">
             {this.props.stationsVia.map(s => (
@@ -201,7 +201,7 @@ class SearchView extends React.Component {
               <div className={classnames({ loader: true, 'loader--loading': this.props.stationSearchLoading || this.props.stationsViaLoading })}></div>
             </div>
           </header>
-          <h3>Von <span className="search-from-name">{this.state.from && this.state.from.name}</span></h3>
+          <h3><i class="fas fa-map-marker"></i>&nbsp; Von <span className="search-from-name">{this.state.from && this.state.from.name}</span></h3>
           { fromSelector }
           { viaSelector }
         </div>
@@ -230,7 +230,7 @@ function HeaderView(props) {
     <header className="station">
       <div className="station-text">
         <h2 className="station-name">{props.board.fromName}</h2>
-        <p className="station-direction">Richtung {props.board.toName}</p>
+        <p className="station-direction"><i class="fas fa-arrow-right"></i> {props.board.toName}</p>
       </div>
       <div className="station-loader">
         <div className={classnames({ loader: true, 'loader--loading': props.loading })}></div>

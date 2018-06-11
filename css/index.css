@@ -45,7 +45,7 @@ body {
 }
 
 .nav-container {
-  padding: 0 0.5rem;
+  padding: 0 0.5rem 0 0.6rem;
 }
 
 .nav-heading {
@@ -193,15 +193,15 @@ body {
   position: absolute;
   top: 1rem;
   right: 0.75rem;
-  height: 1.75rem;
-  width: 1.75rem;
+  height: 1.5rem;
+  width: 1.5rem;
 }
 
 .station-name {
   margin: 0 0 0.2rem;
   padding: 0;
   color: rgb(189, 0, 0);
-  font-size: 1.75rem;
+  font-size: 1.5rem;
 }
 
 .station-direction {
