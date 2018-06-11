@@ -1,4 +1,16 @@
-@import url('https://fonts.googleapis.com/css?family=Pacifico');
+@font-face {
+  font-family: 'Pacifico';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../webfonts/pacifico-v12-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local('Pacifico Regular'), local('Pacifico-Regular'),
+       url('../webfonts/pacifico-v12-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../webfonts/pacifico-v12-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../webfonts/pacifico-v12-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('../webfonts/pacifico-v12-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../webfonts/pacifico-v12-latin-regular.svg#Pacifico') format('svg'); /* Legacy iOS */
+}
+
 
 html {
   margin: 0;
