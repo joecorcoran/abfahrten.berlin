@@ -141,33 +141,41 @@ class Station {
 
 const data = {
   departures(fromId, toId) {
-    VBB.getDepartures(fromId, toId, function(error, response) {
+    VBB.getDepartures(fromId, toId).then(function(data) {
       dispatcher.dispatch({
         actionType: 'departures:retrieved',
         boardId: `${fromId}:${toId}`,
-        departures: error ? Departure.none() : Departure.order(response.body.map(d => new Departure(d)))
+        departures: Departure.order(data.map(d => new Departure(d)))
+      });
+    }).catch(function(error) {
+      dispatcher.dispatch({
+        actionType: 'departures:retrieved',
+        boardId: `${fromId}:${toId}`,
+        departures: Departure.none()
       });
     });
     return Set([Departure.fake()]);
   },
 
   searchStations(query) {
-    VBB.searchStations(query, function(error, response) {
+    VBB.searchStations(query).then(function(data) {
       dispatcher.dispatch({
         actionType: 'stationSearch:retrieved',
-        stations: error ? Station.none() : Station.order(response.body.map(s => new Station(s)))
+        stations: Station.order(data.map(s => new Station(s)))
+      });
+    }).catch(function(error) {
+      dispatcher.dispatch({
+        actionType: 'stationSearch:retrieved',
+        stations: Station.none()
       });
     });
     return Set();
   },
 
   getStations(ids) {
-    let promises = ids.map(i => {
+    let promises = ids.map(id => {
       return new Promise(function(resolve, reject) {
-        VBB.getStation(i, function(error, response) {
-          if (error) reject(error);
-          resolve(response.body);
-        });
+        VBB.getStation(id).then(function(data) { resolve(data); });
       });
     });
     Promise.all(promises).then(function(all) {

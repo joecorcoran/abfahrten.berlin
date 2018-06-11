@@ -1,19 +1,35 @@
-import xhr from 'xhr';
+const root = 'https://2.vbb.transport.rest';
 
-let root = 'https://2.vbb.transport.rest';
+const handle = function(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  } else {
+    var e = new Error(response.statusText);
+    e.response = response;
+    throw e;
+  }
+};
 
-let VBB = {
+const parse = function(response) {
+  return response.json();
+};
+
+const get = function(path) {
+  return fetch(`${root}/${path}`).then(handle).then(parse);
+}
+
+const VBB = {
   // Send X-Identifier header when live
-  getStation(id, cb) {
-    return xhr.get(`${root}/stations/${id}`, { json: true }, cb);
+  getStation(id) {
+    return get(`stations/${id}`);
   },
 
-  searchStations(query, cb) {
-    return xhr.get(`${root}/stations?query=${query}&fuzzy=true&results=10`, { json: true }, cb);
+  searchStations(query) {
+    return get(`stations?query=${query}&fuzzy=true&results=10`);
   },
 
-  getDepartures(fromId, toId, cb) {
-    return xhr.get(`${root}/stations/${fromId}/departures?nextStation=${toId}&results=5`, { json: true }, cb);
+  getDepartures(fromId, toId) {
+    return get(`stations/${fromId}/departures?nextStation=${toId}&results=5`)
   }
 };
 

@@ -19,7 +19,7 @@
     "react-dom": "^16.0.0",
     "screenfull": "^3.3.2",
     "throttle-debounce": "^2.0.0",
-    "xhr": "^2.5.0"
+    "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
     "babel-core": "^6.23.3",

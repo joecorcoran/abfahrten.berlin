@@ -11,7 +11,7 @@ module.exports = {
     ]
   },
   entry: {
-    app: ['babel-polyfill', './src/root.js']
+    app: ['babel-polyfill', 'whatwg-fetch', './src/root.js']
   },
   output: {
     path: path.resolve(__dirname, 'dist')
