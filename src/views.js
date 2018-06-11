@@ -71,7 +71,7 @@ class NavView extends React.PureComponent {
       </button>
     ) : null;
     return (
-      <header className="nav">
+      <header className={classnames({ nav: true, 'nav--fullscreen': this.state.fullscreen })}>
         <div className="nav-container mw9 center flex flex-column flex-row-l">
           <h1 className="nav-heading tc tl-l mb3 mb0-l flex-grow-1 flex-row-l">abfahrten</h1>
           {fullscreen}
