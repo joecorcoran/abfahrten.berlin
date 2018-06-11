@@ -1,6 +1,8 @@
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   module: {
@@ -12,9 +14,16 @@ module.exports = {
     app: './src/root.js'
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist')
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      automaticNameDelimiter: '-'
+    }
   },
   plugins: [
+    new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([
       path.resolve(__dirname, 'css', '*.css')
     ]),

@@ -7,8 +7,8 @@
   "main": "bundle.js",
   "scripts": {
     "build": "webpack --config webpack.production.js",
-    "dev": "webpack-serve --config webpack.development.js --content dist",
-    "cache": "node cache.js"
+    "dev": "webpack-serve --config webpack.development.js --content ./dist",
+    "cache": "node ./cache.js"
   },
   "dependencies": {
     "classnames": "^2.2.3",
@@ -36,6 +36,7 @@
     "babel-plugin-transform-runtime": "^6.5.2",
     "babel-plugin-webpack-prefetch": "^1.1.0",
     "babel-preset-es2015": "^6.5.0",
+    "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.1",
     "html-webpack-plugin": "^3.2.0",
     "uglifyjs-webpack-plugin": "^1.2.5",
