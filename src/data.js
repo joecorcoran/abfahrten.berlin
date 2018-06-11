@@ -122,6 +122,10 @@ class Station {
     return this.data.relevance;
   }
 
+  get weight() {
+    return this.data.weight;
+  }
+
   get latlong() {
     return [
       this.data.location.latitude,

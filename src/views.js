@@ -4,23 +4,40 @@ import ReactDOM from 'react-dom';
 import data from './data';
 import dispatcher from './dispatcher';
 
-function AppView(props) {
-  return (
-    <div>
-      <NavView stationSearchLoading={props.stationSearch.get('loading')}
-        stationSearch={props.stationSearch.get('stations')}
-        stationsViaLoading={props.stationsVia.get('loading')}
-        stationsVia={props.stationsVia.get('stations')} />
-      <div className="flex flex-wrap mw9 center cf">
-        {props.boards.map(b => (
-          <BoardView key={b.id}
-            loading={props.departures.get(b.id).get('loading')}
-            departures={props.departures.get(b.id).get('departures') || []}
-            board={b} />
-        ))}
+class AppView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.nav = React.createRef();
+  }
+
+  showSearch = () => {
+    this.nav.current && this.nav.current.showSearch();
+  }
+
+  render() {
+    const getStarted = <p className="get-started">
+      Du hast noch keine Abfahrtstafeln erstellt. <a onClick={this.showSearch}>Lass uns loslegen</a>!
+    </p>;
+    return (
+      <div>
+        <NavView ref={this.nav}
+          stationSearchLoading={this.props.stationSearch.get('loading')}
+          stationSearch={this.props.stationSearch.get('stations')}
+          stationsViaLoading={this.props.stationsVia.get('loading')}
+          stationsVia={this.props.stationsVia.get('stations')} />
+        <div className="flex flex-wrap mw9 center cf">
+          {this.props.boards.isEmpty() ? (getStarted) : (
+            this.props.boards.map(b => (
+              <BoardView key={b.id}
+                loading={this.props.departures.get(b.id).get('loading')}
+                departures={this.props.departures.get(b.id).get('departures') || []}
+                board={b} />
+            ))
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 class NavView extends React.PureComponent {
@@ -112,7 +129,7 @@ class SearchView extends React.Component {
 
     const fromSelector = !this.state.from ? (
       <React.Fragment>
-        <form autocomplete="off">
+        <form autoComplete="off">
           <label htmlFor="search-input-from">Von</label>
           <input name="search-input-from"
             tabIndex={fromTabIndex}

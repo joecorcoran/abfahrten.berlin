@@ -9,24 +9,30 @@ const departures = new DeparturesStore();
 const stationSearch = new StationSearchStore();
 const stationsVia = new StationsViaStore();
 
-function getStores() {
-  return [
-    boards,
-    departures,
-    stationSearch,
-    stationsVia
-  ];
-};
+class App extends React.Component {
+  static getStores() {
+    return [
+      boards,
+      departures,
+      stationSearch,
+      stationsVia
+    ];
+  }
 
-function getState() {
-  return {
-    boards: boards.getState(),
-    departures: departures.getState(),
-    stationSearch: stationSearch.getState(),
-    stationsVia: stationsVia.getState()
-  };
-};
+  static calculateState(prevState) {
+    return {
+      boards: boards.getState(),
+      departures: departures.getState(),
+      stationSearch: stationSearch.getState(),
+      stationsVia: stationsVia.getState()
+    };
+  }
 
-let AppContainer = Container.createFunctional(AppView, getStores, getState);
+  render() {
+    return <AppView {...this.state} />;
+  }
+}
 
-ReactDOM.render(<AppContainer/>, document.getElementById('app'));
+const AppContainer = Container.create(App);
+
+ReactDOM.render(<AppContainer />, document.getElementById('app'));
