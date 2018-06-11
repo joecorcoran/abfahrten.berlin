@@ -7,7 +7,7 @@
   "main": "bundle.js",
   "scripts": {
     "build": "webpack --config webpack.production.js",
-    "watch": "webpack --config webpack.development.js --watch",
+    "dev": "webpack-serve --config webpack.development.js",
     "cache": "node cache.js"
   },
   "dependencies": {
@@ -40,6 +40,7 @@
     "vbb-stations-connected-to": "^1.7.0",
     "webpack": "^4.0.0",
     "webpack-cli": "^3.0.2",
-    "webpack-merge": "^4.1.2"
+    "webpack-merge": "^4.1.2",
+    "webpack-serve": "^1.0.4"
   }
 }
