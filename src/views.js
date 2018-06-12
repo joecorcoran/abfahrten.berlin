@@ -147,6 +147,14 @@ class SearchView extends React.Component {
     let fromTabIndex = 0;
     let viaTabIndex = 0;
 
+    const linesFor = function(station) {
+      return station.lines ? (
+        <div className="search-lines">
+          {station.lines.map(l => (<span key={l.key} className={`line-num line-num--search line-num--${l.num} line-product--${l.product}`}>{l.num}</span>))}
+        </div>
+      ) : null; 
+    };
+
     const fromSelector = !this.state.from ? (
       <React.Fragment>
         <form autoComplete="off">
@@ -166,6 +174,7 @@ class SearchView extends React.Component {
               <li key={s.key}>
                 <button role="menuitem" tabIndex={fromTabIndex} onMouseOver={(e) => { e.target.focus() }} onClick={this.selectStation.bind(this, s)}>
                   {s.name}
+                  {linesFor(s)}
                 </button>
               </li>
             ))}
@@ -180,13 +189,16 @@ class SearchView extends React.Component {
         <h3><i className="fas fa-arrow-right"></i>&nbsp; Über</h3>
         <div className="search-results-container">
           <ul className="search-results list pa0 w-100">
-            {this.props.stationsVia.map(s => (
-              <li key={s.key}>
-                <button role="menuitem" tabIndex={viaTabIndex} onMouseOver={(e) => { e.target.focus() }} autoFocus={viaCounter++ === 0} onClick={this.selectStation.bind(this, s)}>
+            {this.props.stationsVia.map(s => {
+              return (
+                <li key={s.key}>
+                  <button role="menuitem" tabIndex={viaTabIndex} onMouseOver={(e) => { e.target.focus() }} autoFocus={viaCounter++ === 0} onClick={this.selectStation.bind(this, s)}>
                   {s.name}
+                  {linesFor(s)}
                 </button>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </div>
       </React.Fragment>
@@ -267,7 +279,7 @@ class DeparturesView extends React.PureComponent {
           {this.props.departures.map(d => (
             <li key={d.key} className={classnames({ departure: true, 'w-100': true, cancelled: d.isCancelled})}>
               <span className="departure-destination">{d.destination}</span>
-              <span className={classnames('departure-line-num', `departure-line-num--${d.lineNum}`, `departure-line-product--${d.lineProduct}`)}>{d.lineNum}</span>
+              <span className={classnames('line-num', 'line-num--departure', `line-num--${d.lineNum}`, `line-product--${d.lineProduct}`)}>{d.lineNum}</span>
               <span className="departure-time">{d.timeText}</span>
             </li>
           ))}

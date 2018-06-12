@@ -180,6 +180,11 @@ body {
 .search-results li {
   font-size: 1.5rem;
   padding: 0;
+  border-top: 1px solid rgb(200, 200, 200);
+}
+
+.search-results li:first-child {
+  border-top: 0;
 }
 
 .search-results li button {
@@ -188,7 +193,7 @@ body {
   border: 0;
   width: 100%;
   text-align: left;
-  padding: 0.7rem 1rem 0.5rem;
+  padding: 0.7rem 1rem 0.7rem;
   line-height: 1.5rem;
   cursor: pointer;
   hyphens: auto;
@@ -271,17 +276,28 @@ body {
   text-decoration: line-through;
 }
 
-.departure-line-num {
+.line-num {
   display: inline-block;
   color: white; 
   border-radius: 0.2rem;
-  padding: 0.1rem 0.2rem;
   font-weight: 500;
-  min-width: 2rem;
   text-align: center;
+  background-color: rgba(50, 50, 50, 1);
+}
+
+.line-num--departure {
+  padding: 0.1rem 0.2rem;
+  min-width: 2rem;
   position: absolute;
   left: 0;
-  background-color: rgba(50, 50, 50, 1);
+}
+
+.line-num--search {
+  font-size: 0.75rem;
+  padding: 0.2rem 0 0.05rem;
+  line-height: 1rem;
+  margin-right: 0.4rem;
+  min-width: 2.5rem;
 }
 
 .departure-time {
@@ -295,95 +311,95 @@ body {
   top: 0;
 }
 
-.departure-line-product--bus {
+.line-product--bus {
   background-color: rgba(170, 2, 129, 1);
 }
 
-.departure-line-product--tram {
+.line-product--tram {
   background-color: rgba(255, 0, 0, 1);
 }
 
-.departure-line-product--suburban {
+.line-product--suburban {
   border-radius: 1rem;
 }
 
-.departure-line-product--subway {
+.line-product--subway {
   border-radius: 0;
 }
 
-.departure-line-num--U1 {
+.line-num--U1 {
   background-color: rgba(90, 175, 18, 1);
 }
 
-.departure-line-num--U2 {
+.line-num--U2 {
   background-color: rgba(239, 71, 0, 1);
 }
 
-.departure-line-num--U3 {
+.line-num--U3 {
   background-color: rgba(0, 159, 147, 1);
 }
 
-.departure-line-num--U4 {
+.line-num--U4 {
   background-color: rgba(254, 229, 0, 1);
 }
 
-.departure-line-num--U5 {
+.line-num--U5 {
   background-color: rgba(116, 75, 35, 1);
 }
 
-.departure-line-num--U6 {
+.line-num--U6 {
   background-color: rgba(134, 108, 175, 1);
 }
 
-.departure-line-num--U7 {
+.line-num--U7 {
   background-color: rgba(130, 104, 173, 1);
 }
 
-.departure-line-num--U8 {
+.line-num--U8 {
   background-color: rgba(0, 92, 169, 1);
 }
 
-.departure-line-num--U9 {
+.line-num--U9 {
   background-color: rgba(249, 133, 0, 1);
 }
 
-.departure-line-num--S1 {
+.line-num--S1 {
   background-color: rgba(223, 102, 167, 1);
 }
 
-.departure-line-num--S2, .departure-line-num--S25, .departure-line-num--S26 {
+.line-num--S2, .line-num--S25, .line-num--S26 {
   background-color: rgba(0, 120, 51, 1);
 }
 
-.departure-line-num--S3 {
+.line-num--S3 {
   background-color: rgba(0, 97, 175, 1);
 }
 
-.departure-line-num--S41 {
+.line-num--S41 {
   background-color: rgba(169, 85, 49, 1);
 }
 
-.departure-line-num--S42 {
+.line-num--S42 {
   background-color: rgba(208, 99, 0, 1);
 }
 
-.departure-line-num--S45, .departure-line-num--S46, .departure-line-num--S47 {
+.line-num--S45, .line-num--S46, .line-num--S47 {
   background-color: rgba(207, 157, 71, 1);
 }
 
-.departure-line-num--S5 {
+.line-num--S5 {
   background-color: rgba(241, 114, 0, 1);
 }
 
-.departure-line-num--S7, .departure-line-num--S75 {
+.line-num--S7, .line-num--S75 {
   background-color: rgba(132, 105, 175, 1);
 }
 
-.departure-line-num--S8, .departure-line-num--S85 {
+.line-num--S8, .line-num--S85 {
   background-color: rgba(82, 170, 13, 1);
 }
 
-.departure-line-num--S9 {
+.line-num--S9 {
   background-color: rgba(158, 38, 71, 1);
 }
 

@@ -1,12 +1,39 @@
 import dayjs from 'dayjs';
-import {Set} from 'immutable';
+import * as Im from 'immutable';
 import connected from './connected';
 import dispatcher from './dispatcher';
 import VBB from './vbb';
 
 class Line {
+  static order(set) {
+    const productOrder = function(line) {
+      switch(line.product) {
+        case 'subway': return 1;
+        case 'suburban': return 2;
+        case 'tram': return 3;
+        case 'bus': return 4;
+        case 'train': return 5;
+        default: return 6;
+      }
+    };
+
+    return Im.Set(set).sortBy(l => l.num).sortBy(productOrder);
+  }
+
   constructor(data) {
     this.data = data;
+  }
+
+  get key() {
+    return this.data.name;
+  }
+
+  equals(other) {
+    return this.key === other.key;
+  }
+
+  hashCode() {
+    return parseInt(this.key, 10) | 0;
   }
 
   get num() {
@@ -30,11 +57,11 @@ class Departure {
   }
 
   static none() {
-    return Set();
+    return Im.Set();
   }
 
   static order(set) {
-    return Set(set).sort((a, b) => {
+    return Im.Set(set).sort((a, b) => {
       if (a.time < b.time) return -1;
       if (a.time > b.time) return 1;
       if (a.time === b.time) return 0;
@@ -102,11 +129,11 @@ class Station {
   }
 
   static none() {
-    return Set();
+    return Im.Set();
   }
 
   static order(set) {
-    return Set(set).sort((a, b) => {
+    return Im.Set(set).sort((a, b) => {
       if (a.relevance > b.relevance) return -1;
       if (a.relevance < b.relevance) return 1;
       if (a.relevance === b.relevance) return 0;
@@ -115,7 +142,7 @@ class Station {
 
   constructor(data) {
     this.data = data;
-    this.lines = data.lines ? Set(data.lines.map(l => new Line(l))) : Set();
+    this.lines = data.lines ? Line.order(data.lines.map(l => new Line(l))) : Im.Set();
   }
 
   equals(other) {
@@ -155,6 +182,27 @@ class Station {
   }
 }
 
+const backfillStations = function(ids, actionType) {
+  let all = ids.map(id => {
+    return new Promise(function(resolve, reject) {
+      VBB.getStation(id).then(function(data) { resolve(data); });
+    });
+  });
+
+  Promise.all(all).then(function(stations) {
+    dispatcher.dispatch({
+      actionType: actionType,
+      stations: Station.order(stations.map(s => new Station(s)))
+    });
+  }).catch(function(error) {
+    dispatcher.dispatch({
+      actionType: actionType,
+      stations: Station.none()
+    });
+  });
+  return Im.Set();
+};
+
 const data = {
   departures(fromId, toId) {
     VBB.getDepartures(fromId, toId).then(function(data) {
@@ -170,42 +218,19 @@ const data = {
         departures: Departure.none()
       });
     });
-    return Set([Departure.fake()]);
+    return Im.Set([Departure.fake()]);
   },
 
   searchStations(query) {
     VBB.searchStations(query).then(function(data) {
-      dispatcher.dispatch({
-        actionType: 'stationSearch:retrieved',
-        stations: Station.order(data.map(s => new Station(s)))
-      });
-    }).catch(function(error) {
-      dispatcher.dispatch({
-        actionType: 'stationSearch:retrieved',
-        stations: Station.none()
-      });
+      const ids = data.map(s => s.id);
+      backfillStations(ids, 'stationSearch:retrieved');
     });
-    return Set();
+    return Im.Set();
   },
 
   getStations(ids) {
-    let promises = ids.map(id => {
-      return new Promise(function(resolve, reject) {
-        VBB.getStation(id).then(function(data) { resolve(data); });
-      });
-    });
-    Promise.all(promises).then(function(all) {
-      dispatcher.dispatch({
-        actionType: 'stationsVia:retrieved',
-        stations: Set(all.map(s => new Station(s)))
-      });
-    }).catch(function(error) {
-      dispatcher.dispatch({
-        actionType: 'stationsVia:retrieved',
-        stations: Station.none()
-      });
-    });
-    return Set();
+    return backfillStations(ids, 'stationsVia:retrieved');
   }
 };
 

@@ -1,4 +1,4 @@
-import {Set, Map} from 'immutable';
+import * as Im from 'immutable';
 import {ReduceStore} from 'flux/utils';
 import data from './data';
 import dispatcher from './dispatcher';
@@ -9,7 +9,7 @@ class BoardStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Set();
+    return Im.Set();
   }
 
   reduce(state, action) {
@@ -29,7 +29,7 @@ class DeparturesStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Map();
+    return Im.Map();
   }
 
   reduce(state, action) {
@@ -37,19 +37,19 @@ class DeparturesStore extends ReduceStore {
       case 'board:created':
         // Set fake departures while we wait
         let departures = data.departures(action.board.fromId, action.board.toId);
-        return state.set(action.board.id, Map({
+        return state.set(action.board.id, Im.Map({
           loading: true,
           departures: departures
         }));
       case 'board:tick':
         // Leave current departures alone while we wait
         data.departures(action.board.fromId, action.board.toId);
-        return state.set(action.board.id, Map({
+        return state.set(action.board.id, Im.Map({
           loading: true,
           departures: state.get(action.board.id).get('departures')
         }));
       case 'departures:retrieved':
-        return state.set(action.boardId, Map({
+        return state.set(action.boardId, Im.Map({
           loading: false,
           departures: action.departures
         }));
@@ -66,24 +66,24 @@ class StationSearchStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Map({ stations: Set(), loading: false });
+    return Im.Map({ stations: Im.Set(), loading: false });
   }
 
   reduce(state, action) {
     switch (action.actionType) {
       case 'stationSearch:requested':
-        return Map({
+        return Im.Map({
           stations: action.stations,
           loading: true
         });
       case 'stationSearch:retrieved':
-        return Map({
+        return Im.Map({
           stations: action.stations,
           loading: false
         });
       case 'stationSearch:selected':
       case 'stationSearch:cleared':
-        return Map({ stations: Set(), loading: false });
+        return Im.Map({ stations: Im.Set(), loading: false });
       default:
         return state;
     }
@@ -97,18 +97,18 @@ class StationsViaStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Map({ stations: Set(), loading: false });
+    return Im.Map({ stations: Im.Set(), loading: false });
   }
 
   reduce(state, action) {
     switch (action.actionType) {
       case 'stationsVia:requested':
-        return Map({
+        return Im.Map({
           stations: action.stations,
           loading: true
         });
       case 'stationsVia:retrieved':
-        return Map({
+        return Im.Map({
           stations: action.stations,
           loading: false
         });
