@@ -66,7 +66,7 @@ class NavView extends React.PureComponent {
   render() {
     const search = this.state.showSearch ? (<SearchView {...this.props} hide={this.hideSearch} />) : null;
     const fullscreen = screenfull.enabled ? (
-      <button className="nav-big-button mb2 mb0-l" onClick={this.handleFullscreen}>
+      <button className="nav-fullscreen-button nav-big-button mb2 mb0-l" onClick={this.handleFullscreen}>
         <i className="fas fa-expand"></i>&nbsp; {this.state.fullscreen ? 'Vollbild beenden' : 'Vollbild'}
       </button>
     ) : null;
@@ -75,7 +75,7 @@ class NavView extends React.PureComponent {
         <div className="nav-container mw9 center flex flex-column flex-row-l">
           <h1 className="nav-heading tc tl-l mb3 mb0-l flex-grow-1 flex-row-l">abfahrten</h1>
           {fullscreen}
-          <button className="nav-big-button ml2-l" onClick={this.showSearch}>
+          <button className="nav-search-button nav-big-button ml2-l" onClick={this.showSearch}>
             <i className="fas fa-th-list"></i>&nbsp; Abfahrtstafel erstellen
           </button>
           { search }

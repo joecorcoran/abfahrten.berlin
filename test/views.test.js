@@ -6,12 +6,12 @@ import {AppView, NavView, SearchView} from '../src/views';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const stationSearchStore = Im.Map();
+const stationsViaStore = Im.Map();
+const boardStore = Im.Set();
+
 describe('AppView', () => {
   it('renders NavView with no content', () => {
-    const stationSearchStore = Im.Map();
-    const stationsViaStore = Im.Map();
-    const boardStore = Im.Set();
-
     const wrapper = shallow(
       <AppView stationSearch={stationSearchStore}
         stationsVia={stationsViaStore}
@@ -25,9 +25,6 @@ describe('AppView', () => {
 
 describe('NavView', () => {
   it('renders header', () => {
-    const stationSearchStore = Im.Map();
-    const stationsViaStore = Im.Map();
-
     const wrapper = shallow(
       <NavView stationSearch={stationSearchStore}
         stationsVia={stationsViaStore}
@@ -36,5 +33,17 @@ describe('NavView', () => {
     );
 
     expect(wrapper.find('header.nav').length).toBe(1);
+  });
+
+  it('renders search when button clicked', () => {
+    const wrapper = shallow(
+      <NavView stationSearch={stationSearchStore}
+        stationsVia={stationsViaStore}
+        stationSearchLoading={false}
+        stationsViaLoading={false} />
+    );
+
+    wrapper.find('button.nav-search-button').simulate('click');
+    expect(wrapper.instance().state.showSearch).toBe(true);
   });
 });
