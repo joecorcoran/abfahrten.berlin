@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Container} from 'flux/utils';
-import {AppView} from './views';
+import {AppView} from './views/app';
 import {BoardStore, DeparturesStore, StationSearchStore, StationsViaStore} from './stores';
 
 const boards = new BoardStore();

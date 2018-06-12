@@ -2,7 +2,9 @@ import React from 'react';
 import Enzyme, {shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import * as Im from 'immutable';
-import {AppView, NavView, SearchView} from '../src/views';
+import {AppView} from '../src/views/app';
+import {NavView} from '../src/views/nav';
+import {SearchView} from '../src/views/search';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -35,7 +37,7 @@ describe('NavView', () => {
     expect(wrapper.find('header.nav').length).toBe(1);
   });
 
-  it('renders search when button clicked', () => {
+  it('shows search when button clicked', () => {
     const wrapper = shallow(
       <NavView stationSearch={stationSearchStore}
         stationsVia={stationsViaStore}
