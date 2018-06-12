@@ -21,7 +21,7 @@ class AppView extends React.Component {
       Du hast noch keine Abfahrtstafeln erstellt. <a onClick={this.showSearch}>Lass uns loslegen!</a>
     </p>;
     return (
-      <div>
+      <React.Fragment>
         <NavView ref={this.nav}
           stationSearchLoading={this.props.stationSearch.get('loading')}
           stationSearch={this.props.stationSearch.get('stations')}
@@ -38,7 +38,7 @@ class AppView extends React.Component {
           )}
         </div>
         <div className="footer"><p>Worum geht das? • <a href="https://github.com/joecorcoran/abfahrten.berlin" target="_blank">Code</a> • <a href="https://github.com/joecorcoran/abfahrten.berlin/blob/master/LICENSE.md" target="_blank">PPL</a></p></div>
-      </div>
+      </React.Fragment>
     );
   }
 }
