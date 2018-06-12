@@ -61,11 +61,7 @@ class Departure {
   }
 
   static order(set) {
-    return Im.Set(set).sort((a, b) => {
-      if (a.time < b.time) return -1;
-      if (a.time > b.time) return 1;
-      if (a.time === b.time) return 0;
-    });
+    return Im.Set(set).sortBy(d => d.time);
   }
 
   constructor(data) {
@@ -133,11 +129,7 @@ class Station {
   }
 
   static order(set) {
-    return Im.Set(set).sort((a, b) => {
-      if (a.relevance > b.relevance) return -1;
-      if (a.relevance < b.relevance) return 1;
-      if (a.relevance === b.relevance) return 0;
-    });
+    return Im.Set(set).sortBy(s => s.weight).reverse();
   }
 
   constructor(data) {
