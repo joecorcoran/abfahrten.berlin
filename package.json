@@ -2,9 +2,8 @@
   "name": "abfahrten",
   "version": "1.0.0",
   "description": "Personal VBB dashboard",
-  "repository": "https://github.com/joecorcoran/abfahrten",
+  "repository": "https://github.com/joecorcoran/abfahrten.berlin",
   "author": "Joe Corcoran",
-  "main": "bundle.js",
   "scripts": {
     "build": "webpack --config webpack.production.js",
     "dev": "webpack-serve --config webpack.development.js --content ./dist",
