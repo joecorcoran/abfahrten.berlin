@@ -128,8 +128,12 @@ class Station {
     return Im.Set();
   }
 
-  static order(set) {
+  static orderByWeight(set) {
     return Im.Set(set).sortBy(s => s.weight).reverse();
+  }
+
+  static orderByScore(set) {
+    return Im.Set(set).sortBy(s => s.score).reverse();
   }
 
   constructor(data) {
@@ -153,8 +157,8 @@ class Station {
     return this.data.name;
   }
 
-  get relevance() {
-    return this.data.relevance;
+  get score() {
+    return this.data.score;
   }
 
   get weight() {
@@ -174,17 +178,22 @@ class Station {
   }
 }
 
-const backfillStations = function(ids, actionType) {
-  let all = ids.map(id => {
+const backfillStations = function(originals, actionType, orderFn) {
+  let all = originals.map(obj => {
     return new Promise(function(resolve, reject) {
-      VBB.getStation(id).then(function(data) { resolve(data); });
+      VBB.getStation(obj.id).then(function(data) {
+        resolve(data);
+      });
     });
   });
 
   Promise.all(all).then(function(stations) {
+    const merged = stations.map((s, i) => {
+      return Object.assign({}, originals[i], s);
+    });
     dispatcher.dispatch({
       actionType: actionType,
-      stations: Station.order(stations.map(s => new Station(s)))
+      stations: orderFn(merged.map(s => new Station(s)))
     });
   }).catch(function(error) {
     dispatcher.dispatch({
@@ -192,6 +201,7 @@ const backfillStations = function(ids, actionType) {
       stations: Station.none()
     });
   });
+
   return Im.Set();
 };
 
@@ -215,14 +225,14 @@ const data = {
 
   searchStations(query) {
     VBB.searchStations(query).then(function(data) {
-      const ids = data.map(s => s.id);
-      backfillStations(ids, 'stationSearch:retrieved');
+      backfillStations(data, 'stationSearch:retrieved', Station.orderByScore);
     });
     return Im.Set();
   },
 
   getStations(ids) {
-    return backfillStations(ids, 'stationsVia:retrieved');
+    const data = ids.map(id => { return { id: id }; });
+    return backfillStations(data, 'stationsVia:retrieved', Station.orderByWeight);
   }
 };
 
