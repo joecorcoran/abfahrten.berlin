@@ -9,11 +9,11 @@ class Line {
     this.data = data;
   }
 
-  get lineNum() {
+  get num() {
     return this.data.name.replace(/Tram |Bus /, '');
   }
 
-  get lineProduct() {
+  get product() {
     return this.data.product;
   }
 }
@@ -152,10 +152,6 @@ class Station {
   get connected() {
     // So nasty. Would love an endpoint for looking this up.
     return connected[this.data.id];
-  }
-
-  get lines() {
-    return this.lines;
   }
 }
 
