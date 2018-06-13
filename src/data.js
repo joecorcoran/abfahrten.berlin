@@ -1,182 +1,10 @@
-import dayjs from 'dayjs';
 import * as Im from 'immutable';
 import connected from './connected';
 import dispatcher from './dispatcher';
 import VBB from './vbb';
-
-class Line {
-  static order(set) {
-    const productOrder = function(line) {
-      switch(line.product) {
-        case 'subway': return 1;
-        case 'suburban': return 2;
-        case 'tram': return 3;
-        case 'bus': return 4;
-        case 'train': return 5;
-        default: return 6;
-      }
-    };
-
-    return Im.Set(set).sortBy(l => l.num).sortBy(productOrder);
-  }
-
-  constructor(data) {
-    this.data = data;
-  }
-
-  get key() {
-    return this.data.name;
-  }
-
-  equals(other) {
-    return this.key === other.key;
-  }
-
-  hashCode() {
-    return parseInt(this.key, 10) | 0;
-  }
-
-  get num() {
-    return this.data.name.replace(/Tram |Bus /, '');
-  }
-
-  get product() {
-    return this.data.product;
-  }
-}
-
-class Departure {
-  static fake() {
-    return new Departure({
-      journeyId: '',
-      line: { name: '••' },
-      direction: 'Wird geladen\u2026',
-      when: null,
-      cancelled: false
-    });
-  }
-
-  static none() {
-    return Im.Set();
-  }
-
-  static order(set) {
-    return Im.Set(set).sortBy(d => d.time);
-  }
-
-  constructor(data) {
-    this.data = data;
-    this.line = new Line(data.line);
-  }
-
-  equals(other) {
-    return this.key === other.key;
-  }
-
-  hashCode() {
-    return parseInt(this.key, 10) | 0;
-  }
-
-  get key() {
-    return this.data.journeyId;
-  }
-
-  get lineNum() {
-    return this.line.num;
-  }
-
-  get lineProduct() {
-    return this.line.product;
-  }
-
-  get destination() {
-    return this.data.direction;
-  }
-
-  get time() {
-    return this.calcTime();
-  }
-
-  get timeText() {
-    let t = this.calcTime();
-    switch (t) {
-      case -1:
-        return '';
-      case 0:
-        return 'now';
-      default:
-        return `${t} min`;
-    }
-  }
-
-  get isCancelled() {
-    return !this.data.when && this.data.cancelled;
-  }
-
-  calcTime() {
-    if (!this.data.when) return -1;
-    return dayjs(this.data.when).diff(dayjs(), 'minutes');
-  }
-}
-
-class Station {
-  static fake() {
-    return new Station();
-  }
-
-  static none() {
-    return Im.Set();
-  }
-
-  static orderByWeight(set) {
-    return Im.Set(set).sortBy(s => s.weight).reverse();
-  }
-
-  static orderByScore(set) {
-    return Im.Set(set).sortBy(s => s.score).reverse();
-  }
-
-  constructor(data) {
-    this.data = data;
-    this.lines = data.lines ? Line.order(data.lines.map(l => new Line(l))) : Im.Set();
-  }
-
-  equals(other) {
-    return this.key === other.key;
-  }
-
-  hashCode() {
-    return parseInt(this.key, 10) | 0;
-  }
-
-  get key() {
-    return this.data.id;
-  }
-
-  get name() {
-    return this.data.name;
-  }
-
-  get score() {
-    return this.data.score;
-  }
-
-  get weight() {
-    return this.data.weight;
-  }
-
-  get latlong() {
-    return [
-      this.data.location.latitude,
-      this.data.location.longitude
-    ];
-  }
-
-  get connected() {
-    // So nasty. Would love an endpoint for looking this up.
-    return connected[this.data.id];
-  }
-}
+import Departure from './data/departure';
+import Line from './data/line';
+import Station from './data/station';
 
 const backfillStations = function(originals, actionType, orderFn) {
   let all = originals.map(obj => {
@@ -201,8 +29,6 @@ const backfillStations = function(originals, actionType, orderFn) {
       stations: Station.none()
     });
   });
-
-  return Im.Set();
 };
 
 const data = {
@@ -220,19 +46,20 @@ const data = {
         departures: Departure.none()
       });
     });
-    return Im.Set([Departure.fake()]);
+    return Departure.fakes();
   },
 
   searchStations(query) {
     VBB.searchStations(query).then(function(data) {
       backfillStations(data, 'stationSearch:retrieved', Station.orderByScore);
     });
-    return Im.Set();
+    return Station.none();
   },
 
   getStations(ids) {
     const data = ids.map(id => { return { id: id }; });
-    return backfillStations(data, 'stationsVia:retrieved', Station.orderByWeight);
+    backfillStations(data, 'stationsVia:retrieved', Station.orderByWeight);
+    return Station.none();
   }
 };
 
