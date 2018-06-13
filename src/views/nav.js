@@ -7,6 +7,25 @@ class NavView extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = { showSearch: false, fullscreen: false };
+    this.fullscreenEnabled = screenfull.enabled;
+  }
+
+  componentWillMount() {
+    if (this.fullscreenEnabled) screenfull.on('change', this.resolveFullscreen);
+  }
+
+  componentWillUnmount() {
+    if (this.fullscreenEnabled) screenfull.off('change', this.resolveFullscreen);
+  }
+
+  resolveFullscreen = () => {
+    this.setState({ fullscreen: screenfull.isFullscreen });
+  }
+
+  requestFullscreen = () => {
+    this.setState({ fullscreen: !this.state.fullscreen }, () => {
+      screenfull.toggle();
+    });
   }
 
   showSearch = () => {
@@ -17,16 +36,10 @@ class NavView extends React.PureComponent {
     return this.setState({ showSearch: false });
   }
 
-  handleFullscreen = () => {
-    this.setState({ fullscreen: !this.state.fullscreen }, () => {
-      screenfull.toggle();
-    });
-  }
-
   render() {
     const search = this.state.showSearch ? (<SearchView {...this.props} hide={this.hideSearch} />) : null;
-    const fullscreen = screenfull.enabled ? (
-      <button className="nav-fullscreen-button nav-big-button mb2 mb0-l" onClick={this.handleFullscreen}>
+    const fullscreen = this.fullscreenEnabled ? (
+      <button className="nav-fullscreen-button nav-big-button mb2 mb0-l" onClick={this.requestFullscreen}>
         <i className="fas fa-expand"></i>&nbsp; {this.state.fullscreen ? 'Vollbild beenden' : 'Vollbild'}
       </button>
     ) : null;

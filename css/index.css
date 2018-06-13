@@ -11,7 +11,6 @@
        url('../webfonts/pacifico-v12-latin-regular.svg#Pacifico') format('svg'); /* Legacy iOS */
 }
 
-
 html {
   margin: 0;
   padding: 0;
@@ -75,8 +74,9 @@ body {
 }
 
 .nav--fullscreen .nav-heading {
-  color: rgb(189, 0, 0);
+  color: rgb(120, 120, 120);
   text-shadow: 3px 3px rgba(0, 0, 0, 0.1);
+  font-size: 1.5rem;
 }
 
 .nav-menu {
@@ -99,8 +99,11 @@ body {
 }
 
 .nav--fullscreen .nav-big-button {
+  color: rgb(120, 120, 120);
   box-shadow: 3px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
 }
 
 .search {
