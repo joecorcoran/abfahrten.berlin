@@ -16,6 +16,11 @@ class BoardStore extends ReduceStore {
     switch (action.actionType) {
       case 'board:created':
         return state.add(action.board);
+      case 'query:resolve':
+        const ids = Im.Set([action.query.b]).flatten();
+        // This only handles going back but needs to handle
+        // forward too, e.g. adding new boards...
+        return state.filter(b => ids.has(b.id));
       default:
         return state;
     }
@@ -118,4 +123,29 @@ class StationsViaStore extends ReduceStore {
   }
 }
 
-export {BoardStore, DeparturesStore, StationSearchStore, StationsViaStore};
+class QueryStore extends ReduceStore {
+  constructor() {
+    super(dispatcher);
+  }
+
+  getInitialState() {
+    return Im.Map();
+  }
+
+  reduce(state, action) {
+    switch (action.actionType) {
+      case 'board:created':
+        // Keep adding to the b array each time a board is created
+        return state.mergeDeep({ b: [action.board.id] });
+      case 'query:resolve':
+        // When user changes the history, keep this store up to date
+        // Deep merge is not desirable here as we want to store exactly
+        // what's in the search object
+        return state.merge(action.query);
+      default:
+        return state;
+    }
+  }
+}
+
+export {BoardStore, DeparturesStore, StationSearchStore, StationsViaStore, QueryStore};

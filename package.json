@@ -6,7 +6,7 @@
   "author": "Joe Corcoran",
   "scripts": {
     "build": "webpack --config webpack.production.js",
-    "serve": "webpack-serve --config webpack.development.js --content ./dist",
+    "serve": "webpack-dev-server --config webpack.development.js",
     "cache": "node ./cache.js",
     "test": "jest",
     "dev": "jest --watch"
@@ -15,9 +15,13 @@
     "classnames": "^2.2.3",
     "dayjs": "^1.6.4",
     "flux": "^3.1.3",
+    "history": "^4.7.2",
     "immutable": "^3.8.0",
+    "query-string": "^6.1.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-router-dom": "^4.3.1",
+    "save": "^2.3.2",
     "screenfull": "^3.3.2",
     "throttle-debounce": "^2.0.0",
     "whatwg-fetch": "^2.0.4"
@@ -50,7 +54,7 @@
     "vbb-stations-connected-to": "^1.7.0",
     "webpack": "^4.0.0",
     "webpack-cli": "^3.0.2",
-    "webpack-merge": "^4.1.2",
-    "webpack-serve": "^1.0.4"
+    "webpack-dev-server": "^3.1.4",
+    "webpack-merge": "^4.1.2"
   }
 }

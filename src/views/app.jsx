@@ -3,6 +3,7 @@ import React from 'react';
 import {BoardView} from './board';
 import {SearchView} from './search';
 import {NavView} from './nav';
+import {QueryView} from './query';
 
 class AppView extends React.Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class AppView extends React.Component {
     </p>;
     return (
       <React.Fragment>
+        <QueryView query={this.props.query} history={this.props.history} />
         <NavView ref={this.nav}
           stationSearchLoading={this.props.stationSearch.get('loading')}
           stationSearch={this.props.stationSearch.get('stations')}

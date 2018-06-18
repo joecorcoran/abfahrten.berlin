@@ -7,11 +7,12 @@ const webpack = require('webpack');
 module.exports = {
   module: {
     rules: [
-      { test: /\.js$/, exclude: /node_modules/, use: { loader: 'babel-loader' } }
+      { test: /\.jsx?$/, exclude: /node_modules/, use: { loader: 'babel-loader' } }
     ]
   },
+  resolve: { extensions: ['.js', '.jsx'] },
   entry: {
-    app: ['babel-polyfill', 'whatwg-fetch', './src/root.js']
+    app: ['babel-polyfill', 'whatwg-fetch', './src/root.jsx']
   },
   output: {
     path: path.resolve(__dirname, 'dist')
