@@ -2,6 +2,7 @@ import * as Im from 'immutable';
 import connected from './connected';
 import dispatcher from './dispatcher';
 import VBB from './vbb';
+import {encode, decode} from './urlkey';
 import Board from './data/board';
 import Departure from './data/departure';
 import Line from './data/line';
@@ -37,13 +38,13 @@ const data = {
     VBB.getDepartures(fromId, toId).then(function(data) {
       dispatcher.dispatch({
         actionType: 'departures:retrieved',
-        boardId: `${fromId}:${toId}`,
+        urlkey: `${encode(fromId)}-${encode(toId)}`,
         departures: Departure.order(data.map(d => new Departure(d)))
       });
     }).catch(function(error) {
       dispatcher.dispatch({
         actionType: 'departures:retrieved',
-        boardId: `${fromId}:${toId}`,
+        urlkey: `${encode(fromId)}-${encode(toId)}`,
         departures: Departure.none()
       });
     });
@@ -64,23 +65,19 @@ const data = {
   },
 
   getBoard(fromKey, viaKey) {
-    const key = `${fromKey}:${viaKey}`;
-    //dispatcher.dispatch({
-    //  actionType: 'board:requested',
-    //  key: key
-    //});
     const all = [fromKey, viaKey].map(id => {
       return new Promise(function(resolve, reject) {
         VBB.getStation(id).then(data => resolve(data));
       });
     });
     Promise.all(all).then(function(data) {
-      const stations = data.map(s => new Station(s));
+      const stations = data;
       dispatcher.dispatch({
         actionType: 'board:retrieved',
-        key: key,
-        from: stations[0],
-        via: stations[1]
+        board: new Board({
+          from: stations[0],
+          via: stations[1]
+        })
       });
     }).catch(function(error) {
       // handle error

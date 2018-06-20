@@ -50,8 +50,7 @@ class SearchView extends React.Component {
       return this.setState({ from: station });
     } else {
       dispatcher.dispatch({
-        actionType: 'board:requested',
-        key: `${this.state.from.key}:${station.key}`
+        actionType: 'board:requested'
       });
       data.getBoard(this.state.from.key, station.key);
       this.close();

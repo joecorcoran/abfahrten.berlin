@@ -2,6 +2,7 @@ import * as Im from 'immutable';
 import {ReduceStore} from 'flux/utils';
 import data from './data';
 import dispatcher from './dispatcher';
+import {encode, decode} from './urlkey';
 
 class BoardStore extends ReduceStore {
   constructor() {
@@ -17,14 +18,11 @@ class BoardStore extends ReduceStore {
       case 'board:requested':
         return state;
       case 'board:retrieved':
-        return state.set(action.key, {
-          from: action.from,
-          via: action.via
-        });
+        return state.set(action.board.urlkey, action.board);
       case 'query:resolve':
         action.keys.map(k => {
-          const [from, via] = k.split(':');
-          if (!state.has(k)) data.getBoard(from, via);
+          const [from, via] = k.split('-');
+          if (!state.has(k)) data.getBoard(decode(from), decode(via));
         });
         // returning filtered is fine, as it handles removal and the above will fetch anything else
         return state.filter((_, k) => action.keys.has(k));
@@ -47,20 +45,20 @@ class DeparturesStore extends ReduceStore {
     switch (action.actionType) {
       case 'board:retrieved':
         // Set fake departures while we wait
-        let departures = data.departures(action.from.key, action.via.key);
-        return state.set(action.key, Im.Map({
+        let departures = data.departures(action.board.from.key, action.board.via.key);
+        return state.set(action.board.urlkey, Im.Map({
           loading: true,
           departures: departures
         }));
       case 'board:tick':
         // Leave current departures alone while we wait
         data.departures(action.from.key, action.via.key);
-        return state.set(action.key, Im.Map({
+        return state.set(action.urlkey, Im.Map({
           loading: true,
-          departures: state.get(action.key).get('departures')
+          departures: state.get(action.urlkey).get('departures')
         }));
       case 'departures:retrieved':
-        return state.set(action.boardId, Im.Map({
+        return state.set(action.urlkey, Im.Map({
           loading: false,
           departures: action.departures
         }));
@@ -145,7 +143,7 @@ class QueryStore extends ReduceStore {
     switch (action.actionType) {
       case 'board:retrieved':
         // Keep adding to the b array each time a board is created
-        return state.add(action.key);
+        return state.add(action.board.urlkey);
       case 'query:resolve':
         // When user changes the history, keep this store up to date
         // Deep merge is not desirable here as we want to store exactly

@@ -31,11 +31,9 @@ class AppView extends React.Component {
           {this.props.boards.isEmpty() ? (getStarted) : (
             this.props.boards.entrySeq().map(([key, b]) => (
               <BoardView key={key}
-                _key={key}
                 loading={this.props.departures.get(key).get('loading')}
                 departures={this.props.departures.get(key).get('departures') || []}
-                from={b.from}
-                via={b.via} />
+                board={b} />
             ))
           )}
         </div>

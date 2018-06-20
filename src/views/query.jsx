@@ -34,7 +34,7 @@ class QueryView extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const search = this.props.query.isEmpty() ? '' :  '?' + qs.stringify({ b: this.props.query.toArray() });
+    const search = this.props.query.isEmpty() ? '' :  '?' + qs.stringify({ b: this.props.query.toArray() }, { strict: false });
     if (this.props.history.location.search !== search) {
       this.props.history.push(`${this.props.history.location.pathname}${search}`);
     }
