@@ -29,11 +29,13 @@ class AppView extends React.Component {
           stationsVia={this.props.stationsVia.get('stations')} />
         <div className="flex flex-wrap mw9 center cf">
           {this.props.boards.isEmpty() ? (getStarted) : (
-            this.props.boards.map(b => (
-              <BoardView key={b.id}
-                loading={this.props.departures.get(b.id).get('loading')}
-                departures={this.props.departures.get(b.id).get('departures') || []}
-                board={b} />
+            this.props.boards.entrySeq().map(([key, b]) => (
+              <BoardView key={key}
+                _key={key}
+                loading={this.props.departures.get(key).get('loading')}
+                departures={this.props.departures.get(key).get('departures') || []}
+                from={b.from}
+                via={b.via} />
             ))
           )}
         </div>

@@ -9,24 +9,30 @@ class BoardStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Im.Set();
+    return Im.Map();
   }
 
   reduce(state, action) {
     switch (action.actionType) {
-      case 'board:created':
-        return state.add(action.board);
-      case 'query:resolve':
-        const ids = Im.Set([action.query.b]).flatten();
-        // This only handles going back but needs to handle
-        // forward too, e.g. adding new boards...
-        return state.filter(b => ids.has(b.id));
-      default:
+      case 'board:requested':
         return state;
+      case 'board:retrieved':
+        return state.set(action.key, {
+          from: action.from,
+          via: action.via
+        });
+      case 'query:resolve':
+        action.keys.map(k => {
+          const [from, via] = k.split(':');
+          if (!state.has(k)) data.getBoard(from, via);
+        });
+        // returning filtered is fine, as it handles removal and the above will fetch anything else
+        return state.filter((_, k) => action.keys.has(k));
     }
     return state;
   }
 }
+const boards = new BoardStore();
 
 class DeparturesStore extends ReduceStore {
   constructor() {
@@ -39,19 +45,19 @@ class DeparturesStore extends ReduceStore {
 
   reduce(state, action) {
     switch (action.actionType) {
-      case 'board:created':
+      case 'board:retrieved':
         // Set fake departures while we wait
-        let departures = data.departures(action.board.fromId, action.board.toId);
-        return state.set(action.board.id, Im.Map({
+        let departures = data.departures(action.from.key, action.via.key);
+        return state.set(action.key, Im.Map({
           loading: true,
           departures: departures
         }));
       case 'board:tick':
         // Leave current departures alone while we wait
-        data.departures(action.board.fromId, action.board.toId);
-        return state.set(action.board.id, Im.Map({
+        data.departures(action.from.key, action.via.key);
+        return state.set(action.key, Im.Map({
           loading: true,
-          departures: state.get(action.board.id).get('departures')
+          departures: state.get(action.key).get('departures')
         }));
       case 'departures:retrieved':
         return state.set(action.boardId, Im.Map({
@@ -64,6 +70,7 @@ class DeparturesStore extends ReduceStore {
     return state;
   }
 }
+const departures = new DeparturesStore();
 
 class StationSearchStore extends ReduceStore {
   constructor() {
@@ -95,6 +102,7 @@ class StationSearchStore extends ReduceStore {
     return state;
   }
 }
+const stationSearch = new StationSearchStore();
 
 class StationsViaStore extends ReduceStore {
   constructor() {
@@ -122,6 +130,7 @@ class StationsViaStore extends ReduceStore {
     }
   }
 }
+const stationsVia = new StationsViaStore();
 
 class QueryStore extends ReduceStore {
   constructor() {
@@ -129,23 +138,24 @@ class QueryStore extends ReduceStore {
   }
 
   getInitialState() {
-    return Im.Map();
+    return Im.Set();
   }
 
   reduce(state, action) {
     switch (action.actionType) {
-      case 'board:created':
+      case 'board:retrieved':
         // Keep adding to the b array each time a board is created
-        return state.mergeDeep({ b: [action.board.id] });
+        return state.add(action.key);
       case 'query:resolve':
         // When user changes the history, keep this store up to date
         // Deep merge is not desirable here as we want to store exactly
         // what's in the search object
-        return state.merge(action.query);
+        return state.filter(k => action.keys.has(k));
       default:
         return state;
     }
   }
 }
+const query = new QueryStore();
 
-export {BoardStore, DeparturesStore, StationSearchStore, StationsViaStore, QueryStore};
+export {boards, departures, stationSearch, stationsVia, query};

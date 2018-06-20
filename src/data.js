@@ -2,6 +2,7 @@ import * as Im from 'immutable';
 import connected from './connected';
 import dispatcher from './dispatcher';
 import VBB from './vbb';
+import Board from './data/board';
 import Departure from './data/departure';
 import Line from './data/line';
 import Station from './data/station';
@@ -60,6 +61,32 @@ const data = {
     const data = ids.map(id => { return { id: id }; });
     backfillStations(data, 'stationsVia:retrieved', Station.orderByWeight);
     return Station.none();
+  },
+
+  getBoard(fromKey, viaKey) {
+    const key = `${fromKey}:${viaKey}`;
+    //dispatcher.dispatch({
+    //  actionType: 'board:requested',
+    //  key: key
+    //});
+    const all = [fromKey, viaKey].map(id => {
+      return new Promise(function(resolve, reject) {
+        VBB.getStation(id).then(data => resolve(data));
+      });
+    });
+    Promise.all(all).then(function(data) {
+      const stations = data.map(s => new Station(s));
+      dispatcher.dispatch({
+        actionType: 'board:retrieved',
+        key: key,
+        from: stations[0],
+        via: stations[1]
+      });
+    }).catch(function(error) {
+      // handle error
+      // don't add board, log error?
+      console.log(error);
+    });
   }
 };
 

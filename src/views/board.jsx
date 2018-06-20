@@ -21,8 +21,8 @@ function BoardHeaderView(props) {
   return (
     <header className="station">
       <div className="station-text">
-        <h2 className="station-name">{props.board.fromName}</h2>
-        <p className="station-direction"><i className="fas fa-arrow-right"></i> {props.board.toName}</p>
+        <h2 className="station-name">{props.from.name}</h2>
+        <p className="station-direction"><i className="fas fa-arrow-right"></i> {props.via.name}</p>
       </div>
       <div className="station-loader">
         <div className={classnames({ loader: true, 'loader--loading': props.loading })}></div>
@@ -40,7 +40,9 @@ class BoardDeparturesView extends React.PureComponent {
     this.ticker = setInterval(() => {
       dispatcher.dispatch({
         actionType: 'board:tick',
-        board: this.props.board
+        key: this.props._key,
+        from: this.props.from,
+        via: this.props.via
       });
     }, 20000);
   }
