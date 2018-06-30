@@ -1,7 +1,7 @@
 import React from 'react';
 import qs from 'query-string';
 import * as Im from 'immutable';
-import {debounce} from 'throttle-debounce';
+import {debounce, throttle} from 'throttle-debounce';
 import dispatcher from '../dispatcher';
 import data from '../data';
 
@@ -33,12 +33,12 @@ class QueryView extends React.Component {
     return this.props.boards.keySeq() !== nextProps.boards.keySeq();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate = throttle(500, (prevProps, prevState) => {
     const search = this.props.boards.isEmpty() ? '' :  '?' + qs.stringify({ b: this.props.boards.keySeq().toArray() }, { strict: false });
     if (this.props.history.location.search !== search) {
       this.props.history.push(`${this.props.history.location.pathname}${search}`);
     }
-  }
+  })
   
   render() {
     return null;
