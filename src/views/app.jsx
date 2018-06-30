@@ -21,7 +21,7 @@ class AppView extends React.Component {
     </p>;
     return (
       <React.Fragment>
-        <QueryView query={this.props.query} history={this.props.history} />
+        <QueryView boards={this.props.boards} history={this.props.history} />
         <NavView ref={this.nav}
           stationSearchLoading={this.props.stationSearch.get('loading')}
           stationSearch={this.props.stationSearch.get('stations')}

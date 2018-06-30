@@ -4,7 +4,7 @@ import {BrowserRouter, Route, Redirect, Switch} from 'react-router-dom';
 import {Container} from 'flux/utils';
 import createHistory from 'history/createBrowserHistory';
 import {AppView} from './views/app';
-import {boards, departures, stationSearch, stationsVia, query} from './stores';
+import {boards, departures, stationSearch, stationsVia} from './stores';
 
 const history = createHistory();
 
@@ -14,8 +14,7 @@ class App extends React.Component {
       boards,
       departures,
       stationSearch,
-      stationsVia,
-      query
+      stationsVia
     ];
   }
 
@@ -24,8 +23,7 @@ class App extends React.Component {
       boards: boards.getState(),
       departures: departures.getState(),
       stationSearch: stationSearch.getState(),
-      stationsVia: stationsVia.getState(),
-      query: query.getState()
+      stationsVia: stationsVia.getState()
     };
   }
 

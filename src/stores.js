@@ -3,6 +3,7 @@ import {ReduceStore} from 'flux/utils';
 import data from './data';
 import dispatcher from './dispatcher';
 import {encode, decode} from './urlkey';
+import Board from './data/board';
 
 class BoardStore extends ReduceStore {
   constructor() {
@@ -20,12 +21,20 @@ class BoardStore extends ReduceStore {
       case 'board:retrieved':
         return state.set(action.board.urlkey, action.board);
       case 'query:resolve':
+        const s = state.filter((_, k) => action.keys.has(k));
         action.keys.map(k => {
           const [from, via] = k.split('-');
-          if (!state.has(k)) data.getBoard(decode(from), decode(via));
+          if (!state.has(k)) {
+            data.getBoard(decode(from), decode(via)).then((stations) => {
+              const b = new Board({ from: stations[0], via: stations[1] });
+              dispatcher.dispatch({
+                actionType: 'board:retrieved',
+                board: b
+              });
+            });
+          }
         });
-        // returning filtered is fine, as it handles removal and the above will fetch anything else
-        return state.filter((_, k) => action.keys.has(k));
+        return s;
     }
     return state;
   }
@@ -130,30 +139,4 @@ class StationsViaStore extends ReduceStore {
 }
 const stationsVia = new StationsViaStore();
 
-class QueryStore extends ReduceStore {
-  constructor() {
-    super(dispatcher);
-  }
-
-  getInitialState() {
-    return Im.Set();
-  }
-
-  reduce(state, action) {
-    switch (action.actionType) {
-      case 'board:retrieved':
-        // Keep adding to the b array each time a board is created
-        return state.add(action.board.urlkey);
-      case 'query:resolve':
-        // When user changes the history, keep this store up to date
-        // Deep merge is not desirable here as we want to store exactly
-        // what's in the search object
-        return state.filter(k => action.keys.has(k));
-      default:
-        return state;
-    }
-  }
-}
-const query = new QueryStore();
-
-export {boards, departures, stationSearch, stationsVia, query};
+export {boards, departures, stationSearch, stationsVia};

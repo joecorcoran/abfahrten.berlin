@@ -10,7 +10,7 @@ class QueryView extends React.Component {
     super(props);
   }
   
-  resolve = debounce(100, (location, action) => {
+  resolve = debounce(0, (location, action) => {
     const query = qs.parse(location.search);
     const b = !!query.b ? (Array.isArray(query.b) ? query.b : [query.b]) : [];
     const keys = Im.Set(b);
@@ -30,11 +30,11 @@ class QueryView extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.query !== nextProps.query;
+    return this.props.boards.keySeq() !== nextProps.boards.keySeq();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const search = this.props.query.isEmpty() ? '' :  '?' + qs.stringify({ b: this.props.query.toArray() }, { strict: false });
+    const search = this.props.boards.isEmpty() ? '' :  '?' + qs.stringify({ b: this.props.boards.keySeq().toArray() }, { strict: false });
     if (this.props.history.location.search !== search) {
       this.props.history.push(`${this.props.history.location.pathname}${search}`);
     }

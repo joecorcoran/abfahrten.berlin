@@ -70,16 +70,7 @@ const data = {
         VBB.getStation(id).then(data => resolve(data));
       });
     });
-    Promise.all(all).then(function(data) {
-      const stations = data;
-      dispatcher.dispatch({
-        actionType: 'board:retrieved',
-        board: new Board({
-          from: stations[0],
-          via: stations[1]
-        })
-      });
-    }).catch(function(error) {
+    return Promise.all(all).catch(function(error) {
       // handle error
       // don't add board, log error?
       console.log(error);
