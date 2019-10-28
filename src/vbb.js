@@ -1,4 +1,4 @@
-const root = 'https://2.vbb.transport.rest';
+const root = 'https://3.vbb.transport.rest';
 
 const handle = function(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -29,7 +29,7 @@ const VBB = {
   },
 
   getDepartures(fromId, toId) {
-    return get(`stations/${fromId}/departures?nextStation=${toId}&results=5`)
+    return get(`stations/${fromId}/departures?direction=${toId}&results=5`)
   }
 };
 
