@@ -5,5 +5,6 @@ cache:
     - client/node_modules
 jobs:
   include:
-    - install: cd client && npm i
-      script: cd client && npm test
+    - before_install: cd client
+      install: npm i
+      script: npm test
