@@ -1,0 +1,16 @@
+{
+  "name": "abfahrten-server",
+  "version": "1.0.0",
+  "description": "Server for personal VBB dashboard",
+  "repository": "https://github.com/joecorcoran/abfahrten.berlin",
+  "author": "Joe Corcoran",
+  "scripts": {},
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "redis": "^2.8.0",
+    "rotating-file-stream": "^1.4.6",
+    "shortid": "^2.2.15"
+  },
+  "devDependencies": {}
+}
